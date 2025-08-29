@@ -1,7 +1,7 @@
-from dotenv import load_dotenv
 import os
 from redis.asyncio import Redis
 from contextlib import asynccontextmanager
+from dotenv import load_dotenv
 
 load_dotenv()
 

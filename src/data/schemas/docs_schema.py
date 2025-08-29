@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 class Citation(BaseModel):
     text: str
-    page: Optional[int] = None      # для PDF/JPG
+    page: Optional[int] = None      # для PDF
     bbox: Optional[List[float]] = None
     paragraph_index: Optional[int] = None  # для DOCX
     run_index: Optional[int] = None

@@ -1,16 +1,14 @@
 import os
-
 import logging
+
 from src.utils.celery_client import app
 from src.utils.redis_client import get_redis_session
 
-import pymupdf
-from docx import Document
-
 from src.data.db.base import get_db_session
-from src.data.schemas.docs_schema import Citation
 from src.repositories.contract_repo import ContractRepository
 
+import pymupdf
+from docx import Document
 
 @app.task
 async def async_set_redis(key: str, value: str, expire: int = 10):
@@ -30,8 +28,6 @@ def process_document(document_id: int, file_path: str):
 
     file_extension = os.path.splitext(file_path)[1].lower()
     logging.info(f"Обработка файла с расширением: {file_extension}")
-
-    text = ""
 
     if file_extension == ".pdf":
         try:
@@ -94,7 +90,7 @@ def process_document(document_id: int, file_path: str):
                         paragraph_index=paragraph_index,
                         run_index=0
                     )
-                    paragraph_index += 1
+                paragraph_index += 1
 
             logging.info(f"Извлечен текст из DOCX длиной: {len(full_text)} символов")
             return full_text

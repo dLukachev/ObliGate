@@ -1,8 +1,9 @@
-from fastapi import APIRouter, File, UploadFile, Depends
-from sqlalchemy.orm import Session
-from fastapi.responses import JSONResponse
 import os
 import shutil
+from fastapi import APIRouter, File, UploadFile, Depends
+from fastapi.responses import JSONResponse
+from sqlalchemy.orm import Session
+
 from src.data.db.base import get_db_session
 from src.repositories.contract_repo import ContractRepository
 from src.utils.celery_tasks import process_document

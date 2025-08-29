@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 from src.data.db.base import Base
 
-# Модель для документов (PDF/JPG/PNG сканы)
+# Модель для документов
 class Document(Base):
     __tablename__ = 'documents'
 
@@ -37,9 +37,9 @@ class Citation(Base):
     id = Column(Integer, primary_key=True, index=True)
     document_id = Column(Integer, ForeignKey('documents.id'), nullable=False)
     text = Column(String, nullable=False)  # Извлеченный текст
-    page = Column(Integer, nullable=True)  # Номер страницы (для PDF)
+    page = Column(Integer, nullable=True)  # Номер страницы
     bbox = Column(JSON, nullable=True)  # Координаты bounding box [x0, y0, x1, y1]
-    paragraph_index = Column(Integer, nullable=True)  # Индекс параграфа (для DOCX или структурированных)
+    paragraph_index = Column(Integer, nullable=True)  # Индекс параграфа
     run_index = Column(Integer, nullable=True)  # Индекс run (для более точной трассировки)
 
     # Связи
@@ -86,7 +86,6 @@ class Contract(Base):
     extension_conditions_id = Column(Integer, ForeignKey('citations.id'), nullable=True)
     termination_conditions_id = Column(Integer, ForeignKey('citations.id'), nullable=True)
 
-    # Дополнительно: можно добавить вычисленные поля, если нужно (например, parsed_amount как Float)
     parsed_amount = Column(Float, nullable=True)  # Парсенная сумма для удобства
     parsed_currency = Column(String, nullable=True)  # Валюта
     parsed_penalty_present = Column(Boolean, nullable=True)  # Булево для наличия штрафа
@@ -129,7 +128,7 @@ class Obligation(Base):
     citation = relationship("Citation")
     reminders = relationship("Reminder", back_populates="obligation")
 
-# Модель для напоминаний (используем APScheduler/Celery для scheduling)
+# Модель для напоминаний
 class Reminder(Base):
     __tablename__ = 'reminders'
 
