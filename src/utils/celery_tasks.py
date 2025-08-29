@@ -1,71 +1,84 @@
+import re
 import os
 import logging
-
+import pymupdf
+from docx import Document
 from src.utils.celery_client import app
 from src.utils.redis_client import get_redis_session
-
 from src.data.db.base import get_db_session
 from src.repositories.contract_repo import ContractRepository
 
-import pymupdf
-from docx import Document
+# Настройка логирования
+logging.basicConfig(level=logging.INFO, format='%(asctime)s: %(levelname)s/%(processName)s: %(message)s')
+logger = logging.getLogger(__name__)
 
 @app.task
 async def async_set_redis(key: str, value: str, expire: int = 10):
     async with get_redis_session() as redis:
         await redis.set(key, value, ex=expire)
         return await redis.get(key)
-    
+
 @app.task
 def process_document(document_id: int, file_path: str):
     db = next(get_db_session())
     repo = ContractRepository(db)
 
-    # Проверка существования файла
     if not os.path.exists(file_path):
-        logging.error(f"Файл {file_path} не найден")
+        logger.error(f"Файл {file_path} не найден")
         return None
 
     file_extension = os.path.splitext(file_path)[1].lower()
-    logging.info(f"Обработка файла с расширением: {file_extension}")
+    logger.info(f"Обработка файла с расширением: {file_extension}")
+    full_text = ""
 
     if file_extension == ".pdf":
         try:
             doc = pymupdf.open(file_path)
-            logging.info(f"Открыт PDF: {file_path}, страниц: {len(doc)}")
-            full_text = ""
-
+            logger.info(f"Открыт PDF: {file_path}, страниц: {len(doc)}")
+            
+            paragraph_index = 0
             for page_num in range(len(doc)):
                 page = doc.load_page(page_num)
-                page_text_accum = ""  # текст для текущей страницы
-
+                page_text = page.get_text("text") # type: ignore
+                full_text += page_text
+                logger.info(f"Страница {page_num + 1}: извлечено {len(page_text)} символов")
+                
                 blocks = page.get_text("dict")["blocks"] # type: ignore
                 for block in blocks:
-                    if block["type"] == 0:  # текстовый блок
+                    if block["type"] == 0:
+                        run_index = 0
                         for line in block["lines"]:
                             for span in line["spans"]:
                                 span_text = span["text"].strip()
-                                if span_text:  # пропускаем пустые спаны
+                                if span_text:
                                     bbox = span["bbox"]
-                                    page_text_accum += span_text + " "
-                                    repo.create_citation(
-                                        document_id=document_id,
-                                        text=span_text,
-                                        page=page_num,
-                                        bbox=bbox,
-                                        paragraph_index=0,
-                                        run_index=0
-                                    )
-
-                full_text += page_text_accum + "\n"
-                logging.info(f"Страница {page_num + 1}: извлечено {len(page_text_accum)} символов")
-
+                                    logger.info(f"Span: текст='{span_text}', bbox={bbox}, page={page_num + 1}")
+                                    
+                                    # Фильтрация: сохраняем, если есть хотя бы одна буква или цифра
+                                    if re.search(r'[a-zA-Zа-яА-ЯЁё0-9]', span_text):
+                                        repo.create_citation(
+                                            document_id=document_id,
+                                            text=span_text,
+                                            page=page_num + 1,
+                                            bbox=bbox,
+                                            paragraph_index=paragraph_index,
+                                            run_index=run_index
+                                        )
+                                    else:
+                                        logger.info(f"Пропущен span: '{span_text}' — нет букв или цифр")
+                                    run_index += 1
+                        paragraph_index += 1
+                
+                if not page_text:
+                    dict_text = page.get_text("dict") # type: ignore
+                    logger.info(f"Страница {page_num + 1} (dict): {dict_text.get('blocks', [])}")
+            
             doc.close()
-            logging.info(f"Закрыт документ. Всего извлечено символов: {len(full_text)}")
+            logger.info(f"Закрыт документ. Извлеченный текст длиной: {len(full_text)} символов")
             return full_text
 
         except Exception as e:
-            logging.error(f"Ошибка при чтении PDF {file_path}: {type(e).__name__}: {str(e)}")
+            logger.error(f"Ошибка при чтении PDF {file_path}: {type(e).__name__}: {str(e)}")
             return None
 
     elif file_extension == ".docx":
@@ -74,23 +87,62 @@ def process_document(document_id: int, file_path: str):
             full_text = ""
             paragraph_index = 0
 
-            for paragr in doc.paragraphs:
-                par_text = paragr.text  # сохраняем текст абзаца как есть
-                full_text += par_text + "\n"  # перенос строки после абзаца
+            # Обработка параграфов
+            for para in doc.paragraphs:
+                para_text = para.text.strip()
+                if para_text:
+                    full_text += para_text + "\n"
+                    logging.info(f"Параграф {paragraph_index}: текст='{para_text}'")
+                    
+                    # Обработка runs внутри параграфа для более детальной трассировки
+                    run_index = 0
+                    for run in para.runs:
+                        run_text = run.text.strip()
+                        if run_text:
+                            logging.info(f"Run {run_index} в параграфе {paragraph_index}: текст='{run_text}'")
+                            # Фильтрация: сохраняем, если есть хотя бы одна буква или цифра
+                            if re.search(r'[a-zA-Zа-яА-ЯЁё0-9]', run_text):
+                                repo.create_citation(
+                                    document_id=document_id,
+                                    text=run_text,
+                                    page=0,
+                                    bbox=None,
+                                    paragraph_index=paragraph_index,
+                                    run_index=run_index
+                                )
+                            else:
+                                logger.info(f"Пропущен run: '{run_text}' — нет букв или цифр")
+                            run_index += 1
+                    paragraph_index += 1
 
-                # создаем запись для каждого абзаца
-                if par_text == '':
-                    pass
-                else:
-                    repo.create_citation(
-                        document_id=document_id,
-                        text=par_text,
-                        page=0,  # для Word страницы обычно нет, можно 0 или вычислять по need
-                        bbox=None,  # bbox для Word не нужен, оставляем None
-                        paragraph_index=paragraph_index,
-                        run_index=0
-                    )
-                paragraph_index += 1
+            # Обработка таблиц
+            for table in doc.tables:
+                for row in table.rows:
+                    for cell in row.cells:
+                        cell_text = cell.text.strip()
+                        if cell_text:
+                            full_text += cell_text + "\n"
+                            logging.info(f"Таблица, ячейка: текст='{cell_text}', paragraph_index={paragraph_index}")
+                            # Сохраняем как параграф, но обрабатываем runs внутри ячейки
+                            run_index = 0
+                            for run in cell.paragraphs[0].runs:  # Предполагаем, что в ячейке один параграф
+                                run_text = run.text.strip()
+                                if run_text:
+                                    logging.info(f"Run {run_index} в ячейке: текст='{run_text}'")
+                                    # Фильтрация: сохраняем, если есть хотя бы одна буква или цифра
+                                    if re.search(r'[a-zA-Zа-яА-ЯЁё0-9]', run_text):
+                                        repo.create_citation(
+                                            document_id=document_id,
+                                            text=run_text,
+                                            page=0,
+                                            bbox=None,
+                                            paragraph_index=paragraph_index,
+                                            run_index=run_index
+                                        )
+                                    else:
+                                        logger.info(f"Пропущен run: '{run_text}' — нет букв или цифр")
+                                    run_index += 1
+                        paragraph_index += 1
 
             logging.info(f"Извлечен текст из DOCX длиной: {len(full_text)} символов")
             return full_text
@@ -98,3 +150,7 @@ def process_document(document_id: int, file_path: str):
         except Exception as e:
             logging.error(f"Ошибка при чтении DOCX {file_path}: {type(e).__name__}: {str(e)}")
             return None
+
+    else:
+        logging.error(f"Неподдерживаемое расширение файла: {file_extension}")
+        return None
