@@ -1,0 +1,14 @@
+fastapi
+sqlalchemy
+redis
+celery
+uvicorn
+python-dotenv
+python-multipart
+LangChain
+ChromaDB
+Postgres
+PyMuPDF
+pytesseract
+PaddleOCR
+python-docx

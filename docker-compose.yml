@@ -1,0 +1,17 @@
+version: "3.12"
+services:
+  api:
+    build: .
+    command: uvicorn app:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    restart: always
+
+  worker:
+    build: .
+    command: celery -A src.utils.celery_client worker --pool=solo -l info
+    env_file:
+      - .env
+    restart: always
