@@ -28,6 +28,9 @@ client = InferenceClient(
 SYS_PROMPT = """
 Ты — эксперт по анализу текста договоров. Твоя задача — проанализировать предоставленный текст чанка и определить, какие части текста соответствуют следующим полям договора:
 
+Если поле не найдено в тексте, пропусти его. 
+Формат ответа, без рассуждений и мыслей, только готовы ответ. 
+
 1. party_1_name — имя или название первой стороны договора.
 2. party_2_name — имя или название второй стороны договора.
 3. contract_date — дата заключения договора.
@@ -44,7 +47,10 @@ SYS_PROMPT = """
 14. extension_conditions — условия продления договора.
 15. termination_conditions — условия расторжения договора.
 
-Для каждого поля верни JSON-объект, где ключ — название поля, а значение — ID цитаты из предоставленного списка. Если поле не найдено в тексте, пропусти его. Формат ответа, без рассуждений и мыслей, только готовы ответ. Если подходящих цитат под одну категорию несколько, то записывай айди в виде листа через запятую:
+Для каждого поля верни JSON-объект, где ключ — название поля, а значение — ID цитаты из предоставленного списка. 
+Если поле не найдено в тексте, пропусти его. 
+Формат ответа, без рассуждений и мыслей, только готовы ответ. 
+Если подходящих цитат под одну категорию несколько, то записывай айди в виде листа через запятую:
 {{
   "party_1_name": [<ID>, <ID>, <ID>],
   "party_2_name": <ID>,
@@ -56,10 +62,10 @@ SYS_PROMPT = """
 def llm(prompt: str, context: str | None, retries: int = 3):
     for attempt in range(retries):
         try:
-            logger.debug(f"Sending prompt (attempt {attempt + 1}): {prompt[:1000]}...")
+            # logger.debug(f"Sending prompt (attempt {attempt + 1}): {prompt[:1000]}...")
             response = client.chat.completions.create(
                 messages=[{"role": "user", "content": prompt, "context": context if context is not None else 'Первое сообщение, контекста нет.'}],
-                max_tokens=512,
+                max_tokens=2048,
                 temperature=0.55,
                 top_p=0.55,
                 stream=False
@@ -86,7 +92,7 @@ def get_and_send_to_llm(document_id: int):
     count = 0
     for citation in result:
         data.append(([citation.text], citation.id))
-        size += len(citation.text) # type: ignore
+        size += len(citation.text) # type: ignore  (and count <= 20)
         if size > 1500:
             # Обработка чанка (очистка, фильтрация и т.д.)
             cleaned_data = [item for item in data if item[0]]  # Пример: убираем пустые строки
