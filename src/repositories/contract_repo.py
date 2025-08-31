@@ -1,7 +1,9 @@
+import logging
 from sqlalchemy.orm import Session
-from typing import Optional, List
+from sqlalchemy import insert, select, delete
+from typing import Any, Optional, List, Dict
 from datetime import datetime
-from src.data.db.models import Document, Contract, Citation, Requisites, Obligation, Reminder
+from src.data.db.models import Document, Contract, Citation, Requisites, Obligation, Reminder, contract_citation_links
 
 class ContractRepository:
     """Репозиторий для работы с таблицами БД в проекте ObliGate"""
@@ -76,9 +78,9 @@ class ContractRepository:
         return self.db.query(Citation).filter(Citation.document_id == document_id).all()
 
     # CRUD для Contract
-    def create_contract(self, document_id: int, **kwargs) -> Contract:
-        """Создает запись о договоре с опциональными полями из DocsInfo"""
-        contract = Contract(document_id=document_id, **kwargs)
+    def create_contract(self, document_id: int, citation_data: Optional[Dict] = None, **kwargs) -> Contract:
+        """Создает запись о договоре с опциональными полями"""
+        contract = Contract(document_id=document_id, citation_data=citation_data, **kwargs)
         self.db.add(contract)
         self.db.commit()
         self.db.refresh(contract)
@@ -88,16 +90,63 @@ class ContractRepository:
         """Получает договор по ID документа"""
         return self.db.query(Contract).filter(Contract.document_id == document_id).first()
 
-    def update_contract(self, contract_id: int, **kwargs) -> Optional[Contract]:
+    def update_contract(self, contract_id: int, citation_data: Optional[Dict] = None, **kwargs) -> Optional[Contract]:
         """Обновляет поля договора"""
         contract = self.db.query(Contract).filter(Contract.id == contract_id).first()
         if contract:
+            if citation_data is not None:
+                contract.citation_data = citation_data # type: ignore
             for key, value in kwargs.items():
                 setattr(contract, key, value)
             self.db.commit()
             self.db.refresh(contract)
             return contract
         return None
+
+    # Методы для contract_citation_links
+    def create_citation_link(self, contract_id: int, citation_id: int, field_name: str) -> None:
+        """Создает связь между договором и цитатой для конкретного поля"""
+        stmt = insert(contract_citation_links).values(
+            contract_id=contract_id,
+            citation_id=citation_id,
+            field_name=field_name
+        )
+        self.db.execute(stmt)
+        self.db.commit()
+
+    def bulk_create_citation_links(self, contract_id: int, links: List[Dict[str, Any]]) -> None:
+        """Создает несколько связей (bulk insert) с обработкой дубликатов"""
+        stmt = insert(contract_citation_links)
+        values = [{'contract_id': contract_id, **link} for link in links]
+        try:
+            self.db.execute(stmt, values)
+            self.db.commit()
+        except Exception as e:
+            logging.error(f"Error in bulk_create_citation_links: {e}")
+            self.db.rollback()
+
+    def get_citation_links_by_contract(self, contract_id: int) -> List[Dict[str, Any]]:
+        """Получает все связи для договора"""
+        stmt = select(contract_citation_links).where(contract_citation_links.c.contract_id == contract_id)
+        result = self.db.execute(stmt).fetchall()
+        return [{'contract_id': row[0], 'citation_id': row[1], 'field_name': row[2]} for row in result]
+
+    def get_citation_links_by_field(self, contract_id: int, field_name: str) -> List[int]:
+        """Получает все citation_id для конкретного поля в договоре"""
+        stmt = select(contract_citation_links.c.citation_id).where(
+            (contract_citation_links.c.contract_id == contract_id) &
+            (contract_citation_links.c.field_name == field_name)
+        )
+        result = self.db.execute(stmt).scalars().all()
+        return result # type: ignore
+
+    def delete_citation_links(self, contract_id: int, field_name: Optional[str] = None) -> None:
+        """Удаляет связи для договора или конкретного поля"""
+        stmt = delete(contract_citation_links).where(contract_citation_links.c.contract_id == contract_id)
+        if field_name:
+            stmt = stmt.where(contract_citation_links.c.field_name == field_name)
+        self.db.execute(stmt)
+        self.db.commit()
 
     # CRUD для Requisites
     def create_requisites(self, contract_id: int, inn_id: Optional[int] = None,

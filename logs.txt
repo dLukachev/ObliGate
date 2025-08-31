@@ -1,6 +1,341 @@
-2025-08-30 16:49:09,299: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
-2025-08-30 16:49:17,906: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
-2025-08-30 16:49:26,912: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
-2025-08-30 16:49:38,685: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
-2025-08-30 16:49:40,103: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
-2025-08-30 16:49:51,783: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 17:09:25,191: INFO: BEGIN (implicit)
+2025-08-30 17:09:25,192: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-08-30 17:09:25,192: INFO: [generated in 0.00014s] (1,)
+2025-08-30 17:09:25,203: DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2025-08-30 17:09:26,028: DEBUG: https://huggingface.co:443 "GET /api/models/openai/gpt-oss-20b?expand=inferenceProviderMapping HTTP/1.1" 200 713
+2025-08-30 17:09:26,181: DEBUG: Starting new HTTPS connection (1): router.huggingface.co:443
+2025-08-30 17:09:39,026: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 17:09:39,034: ERROR: Ошибка парсинга JSON: analysisWe need to map fields to IDs from list. We have list of tuples: (['text'], id). We need to find which IDs correspond to each field. Let's examine list.
+
+IDs:
+
+1: ['ДОГОВОР']
+2: ['оказания услуг по организации проведения экзамена на владение']
+3: ['русским языком, знание истории России  и основ законодательства РФ']
+4: ['для иностранных граждан']
+5: ['г. Иркутск                                                                              «__» ________201__г.']
+6: ['Государственное бюджетное профессиональное образовательное учреждение']
+7: ['Иркутской']
+8: ['области']
+9: ['«Иркутский']
+10: ['региональный']
+11: ['колледж']
+12: ['педагогического']
+13: ['образования» в  лице директора  А.А. Сопина, действующего на основании']
+14: ['Устава, распоряжение Министерства образования Иркутской области от']
+15: ['15.03.2016г. № 43-мр-л (далее –  «Исполнитель»), с одной стороны, и']
+16: ['наименование организации с указанием должности, фамилии, имени, отчества (при']
+17: ['наличии) лица, действующего от имени организации, документов, подтверждающих']
+18: ['полномочия указанного лица, направляющей Экзаменуемого']
+19: ['именуемое']
+20: ['в']
+21: ['дальнейшем']
+22: ['«Заказчик»,']
+23: ['действующий']
+24: ['в']
+25: ['отношении']
+26: ['иностранного гражданина (лица без гражданства), направляемого для получения']
+27: ['услуги']
+28: ['ФИО, паспортные данные лица, получающего услугу по организации проведения Экзамена']
+29: ['на владение русским языком, знание истории России и основам законодательства РФ  (далее –']
+30: ['«Экзаменуемый»)']
+31: ['с другой стороны, заключили настоящий Договор о нижеследующем:']
+32: ['1. Предмет договора.']
+
+We need to map fields:
+
+1. party_1_name — имя или название первой стороны договора.
+2. party_2_name — имя или название второй стороны договора.
+3. contract_date — дата заключения договора.
+4. contract_start — дата начала действия договора.
+5. contract_end — дата окончания действия договора.
+6. subject — предмет договора (товар, услуга и т.д.).
+7. delivery_terms — условия доставки.
+8. payment_terms — условия оплаты.
+9. amount — сумма договора.
+10. currency — валюта договора.
+11. penalty_present — наличие неустойки (да/нет).
+12. penalty_amount_or_formula — сумма неустойки или формула расчета.
+13. extension_possible — возможность продления договора (да/нет).
+14. extension_conditions — условия продления договора.
+15. termination_conditions — условия расторжения договора.
+
+We only have snippet of contract. The list includes only some parts. We need to find IDs that correspond to each field. Let's analyze.
+
+We have ID 1: 'ДОГОВОР' - generic.
+
+ID 2: 'оказания услуг по организации проведения экзамена на владение' - subject? It's about services of organizing exam. So subject likely ID 2.
+
+ID 3: 'русским языком, знание истории России  и основ законодательства РФ' - maybe part of subject? But subject is about exam. ID 3 maybe part of subject description. But we can assign subject to ID 2 or 3? The field subject: "предмет договора (товар, услуга и т.д.)". The subject is "оказания услуг по организации проведения экзамена на владение". So ID 2.
+
+ID 4: 'для иностранных граждан' - maybe part of subject? Not exactly. Could be part of subject description. But we can ignore.
+
+ID 5: 'г. Иркутск ... «__» ________201__г.' - date of contract? It includes city and date placeholder. So contract_date likely ID 5.
+
+IDs 6-12: These are about the institution: 'Государственное бюджетное профессиональное образовательное учреждение', 'Иркутской', 'области', '«Иркутский', 'региональный', 'колледж', 'педагогического', 'образования» в лице директора А.А. Сопина, действующего на основании'. These likely form the name of party 1: the educational institution. So party_1_name could be combination of IDs 6-13? Let's see: ID 13: 'образования» в  лице директора  А.А. Сопина, действующего на основании'. So the full name might be IDs 6-13. But we need to provide IDs for party_1_name. We can list IDs 6-13 as list.
+
+IDs 15: '15.03.2016г. № 43-мр-л (далее – «Исполнитель»), с одной стороны, и' - This includes date 15.03.2016 and refers to Исполнитель. This might be the date of contract? But we already have ID 5. ID 15 includes date and refers to Исполнитель. Could be contract_date? But ID 5 already has date placeholder. ID 15 includes actual date 15.03.2016. So contract_date could be ID 15. But ID 5 also includes date placeholder. Which one is correct? The snippet: 'г. Иркутск ... «__» ________201__г.' This is typical date of signing. ID 15 includes date 15.03.2016. So maybe contract_date is ID 15. ID 5 might be location and date placeholder. But we can choose ID 15.
+
+IDs 16-18: 'наименование организации с указанием должности, фамилии, имени, отчества (при наличии) лица, действующего от имени организации, документов, подтверждающих полномочия указанного лица, направляющей Экзаменуемого' - This is about the party 2? Actually this is about the organization that sends the examinee. So party_2_name might be ID 16-18? But we don't have full name. ID 19: 'именуемое' maybe refers to the organization. ID 20: 'в' etc. Hard.
+
+IDs 22: '«Заказчик»,', 23: 'действующий', 24: 'в', 25: 'отношении', 26: 'иностранного гражданина (лица без гражданства), направляемого для получения', 27: 'услуги', 28: 'ФИО, паспортные данные лица, получающего услугу по организации проведения Экзамена', 29: 'на владение русским языком, знание истории России и основам законодательства РФ  (далее –', 30: '«Экзаменуемый»)'. These are about the examinee.
+
+ID 31: 'с другой стороны, заключили настоящий Договор о нижеследующем:'.
+
+ID 32: '1. Предмет договора.'.
+
+We don't have delivery_terms, payment_terms, amount, currency, penalty, extension, termination. So we skip those.
+
+Thus we produce JSON with fields found: party_1_name, party_2_name, contract_date, subject.
+
+Also maybe contract_start and contract_end not present.
+
+Let's decide:
+
+party_1_name: IDs 6-13 (list). That includes 6,7,8,9,10,11,12,13. So list [6,7,8,9,10,11,12,13].
+
+party_2_name: maybe ID 15? Actually ID 15 refers to Исполнитель. But party_2_name is the other party. The snippet: '15.03.2016г. № 43-мр-л (далее – «Исполнитель»), с одной стороны, и' indicates that the party named Исполнитель is one side. So party_2_name could be ID 15. But ID 15 includes date and number. But maybe the name is 'Исполнитель'. But we don't have separate ID for that. So we can use ID 15.
+
+contract_date: ID 15 (date 15.03.2016). Or ID 5. Which is more accurate? ID 5 includes placeholder date. ID 15 includes actual date. So contract_date ID 15.
+
+subject: ID 2.
+
+We might also include contract_start and contract_end? Not present.
+
+Thus JSON:
+
+{
+  "party_1_name": [6,7,8,9,10,11,12,13],
+  "party_2_name": 15,
+  "contract_date": 15,
+  "subject": 2
+}
+
+But we have duplicate ID 15 for both party_2_name and contract_date. That's okay? The instruction: For each field return JSON object where key is field name and value is ID of quote. If multiple quotes, list. So we can assign same ID to multiple fields. It's fine.
+
+But maybe we should separate party_2_name as ID 15? But ID 15 includes date. But maybe the name of party 2 is 'Исполнитель'. But we don't have separate ID. So we use 15.
+
+Alternatively, we could use ID 16-18 for party_2_name. But those are about organization name. But we don't have full name. But we can include them as list [16
+2025-08-30 17:09:48,291: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 17:09:57,790: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 17:10:05,327: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 17:24:29,344: INFO: BEGIN (implicit)
+2025-08-30 17:24:29,346: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-08-30 17:24:29,346: INFO: [generated in 0.00012s] (1,)
+2025-08-30 17:24:29,358: DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2025-08-30 17:24:29,923: DEBUG: https://huggingface.co:443 "GET /api/models/openai/gpt-oss-20b?expand=inferenceProviderMapping HTTP/1.1" 200 713
+2025-08-30 17:24:29,948: DEBUG: Starting new HTTPS connection (1): router.huggingface.co:443
+2025-08-30 17:24:38,194: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 17:24:43,407: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 17:24:51,709: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 17:24:57,137: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 17:24:57,148: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-08-30 17:24:57,148: INFO: [generated in 0.00066s] (1, 1, 0)
+2025-08-30 17:27:11,939: INFO: BEGIN (implicit)
+2025-08-30 17:27:11,941: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-08-30 17:27:11,941: INFO: [generated in 0.00010s] (1,)
+2025-08-30 17:27:11,948: DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2025-08-30 17:27:12,610: DEBUG: https://huggingface.co:443 "GET /api/models/openai/gpt-oss-20b?expand=inferenceProviderMapping HTTP/1.1" 200 713
+2025-08-30 17:27:12,641: DEBUG: Starting new HTTPS connection (1): router.huggingface.co:443
+2025-08-30 17:27:17,632: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 17:27:22,229: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 17:27:27,565: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 17:27:35,022: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 17:27:35,027: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-08-30 17:27:35,027: INFO: [generated in 0.00038s] (1, 1, 0)
+2025-08-30 17:27:35,031: INFO: INSERT INTO contracts (document_id, citation_data, parsed_amount, parsed_currency, parsed_penalty_present) VALUES (?, ?, ?, ?, ?)
+2025-08-30 17:27:35,031: INFO: [generated in 0.00048s] (1, '{"party_1_name": [[4, 6]], "party_2_name": [[9]], "contract_date": [[3]], "subject": [[2], [13], [43], [52]], "payment_terms": [[52]]}', None, None, None)
+2025-08-30 17:27:35,033: INFO: COMMIT
+2025-08-30 17:27:35,035: INFO: BEGIN (implicit)
+2025-08-30 17:27:35,036: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-08-30 17:27:35,037: INFO: [generated in 0.00042s] (1,)
+2025-08-30 17:27:35,038: INFO: INSERT INTO contract_citation_links (contract_id, citation_id, field_name) VALUES (?, ?, ?)
+2025-08-30 17:27:35,038: INFO: [generated in 0.00034s] [(1, 4, 'party_1_name'), (1, 6, 'party_1_name'), (1, 9, 'party_2_name'), (1, 3, 'contract_date'), (1, 2, 'subject'), (1, 13, 'subject'), (1, 43, 'subject'), (1, 52, 'subject'), (1, 52, 'payment_terms')]
+2025-08-30 17:33:17,055: INFO: BEGIN (implicit)
+2025-08-30 17:33:17,056: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-08-30 17:33:17,056: INFO: [generated in 0.00010s] (1,)
+2025-08-30 17:33:17,064: DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2025-08-30 17:33:17,677: DEBUG: https://huggingface.co:443 "GET /api/models/openai/gpt-oss-20b?expand=inferenceProviderMapping HTTP/1.1" 200 713
+2025-08-30 17:33:17,713: DEBUG: Starting new HTTPS connection (1): router.huggingface.co:443
+2025-08-30 17:33:22,943: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 17:33:29,761: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 17:33:39,073: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 17:33:45,833: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 17:33:45,839: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-08-30 17:33:45,840: INFO: [generated in 0.00046s] (1, 1, 0)
+2025-08-30 17:33:45,843: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-08-30 17:33:45,844: INFO: [generated in 0.00032s] (1, 1, 0)
+2025-08-30 17:33:45,847: INFO: UPDATE contracts SET citation_data=? WHERE contracts.id = ?
+2025-08-30 17:33:45,847: INFO: [generated in 0.00047s] ('{"party_1_name": [[4]], "party_2_name": [[9]], "contract_date": [[3]], "subject": [[2], [13, 14, 15], [43], [52]], "payment_terms": [[52]]}', 1)
+2025-08-30 17:33:45,849: INFO: COMMIT
+2025-08-30 17:33:45,851: INFO: BEGIN (implicit)
+2025-08-30 17:33:45,853: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-08-30 17:33:45,853: INFO: [generated in 0.00017s] (1,)
+2025-08-30 17:33:45,854: INFO: INSERT INTO contract_citation_links (contract_id, citation_id, field_name) VALUES (?, ?, ?)
+2025-08-30 17:33:45,854: INFO: [generated in 0.00017s] [(1, 4, 'party_1_name'), (1, 9, 'party_2_name'), (1, 3, 'contract_date'), (1, 2, 'subject'), (1, 13, 'subject'), (1, 14, 'subject'), (1, 15, 'subject'), (1, 43, 'subject'), (1, 52, 'subject')]
+2025-08-30 17:33:45,855: INFO: COMMIT
+2025-08-30 23:05:19,277: INFO: BEGIN (implicit)
+2025-08-30 23:05:19,279: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-08-30 23:05:19,279: INFO: [generated in 0.00010s] (1,)
+2025-08-30 23:05:19,287: DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2025-08-30 23:05:19,889: DEBUG: https://huggingface.co:443 "GET /api/models/openai/gpt-oss-20b?expand=inferenceProviderMapping HTTP/1.1" 200 713
+2025-08-30 23:05:19,912: DEBUG: Starting new HTTPS connection (1): router.huggingface.co:443
+2025-08-30 23:05:31,583: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 23:05:41,754: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 23:05:46,203: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 23:05:54,178: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 23:06:04,018: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 23:06:14,318: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 23:06:14,335: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-08-30 23:06:14,335: INFO: [generated in 0.00143s] (1, 1, 0)
+2025-08-30 23:06:14,343: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-08-30 23:06:14,343: INFO: [generated in 0.00028s] (1, 1, 0)
+2025-08-30 23:06:14,350: INFO: UPDATE contracts SET citation_data=? WHERE contracts.id = ?
+2025-08-30 23:06:14,350: INFO: [generated in 0.00065s] ('{"party_1_name": [[4, 5], [11]], "party_2_name": [[9]], "contract_date": [[3]], "subject": [[2], [13, 14, 15], [43], [83]], "contract_start": [[16]], "payment_terms": [[52], [80]], "amount": [[83]], "currency": [[83]]}', 1)
+2025-08-30 23:06:14,353: INFO: COMMIT
+2025-08-30 23:06:14,356: INFO: BEGIN (implicit)
+2025-08-30 23:06:14,360: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-08-30 23:06:14,360: INFO: [generated in 0.00047s] (1,)
+2025-08-30 23:06:14,362: INFO: INSERT INTO contract_citation_links (contract_id, citation_id, field_name) VALUES (?, ?, ?)
+2025-08-30 23:06:14,362: INFO: [generated in 0.00014s] [(1, 4, 'party_1_name'), (1, 5, 'party_1_name'), (1, 11, 'party_1_name'), (1, 9, 'party_2_name'), (1, 3, 'contract_date'), (1, 2, 'subject'), (1, 13, 'subject'), (1, 14, 'subject')  ... displaying 10 of 14 total bound parameter sets ...  (1, 52, 'payment_terms'), (1, 80, 'payment_terms')]
+2025-08-30 23:11:26,476: INFO: BEGIN (implicit)
+2025-08-30 23:11:26,478: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-08-30 23:11:26,478: INFO: [generated in 0.00010s] (1,)
+2025-08-30 23:11:26,484: DEBUG: Starting new HTTPS connection (1): huggingface.co:443
+2025-08-30 23:11:27,208: DEBUG: https://huggingface.co:443 "GET /api/models/openai/gpt-oss-20b?expand=inferenceProviderMapping HTTP/1.1" 200 713
+2025-08-30 23:11:27,229: DEBUG: Starting new HTTPS connection (1): router.huggingface.co:443
+2025-08-30 23:11:40,270: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 23:11:40,276: ERROR: Ошибка парсинга JSON: analysisWe need to parse the provided list of citations. Each citation is a tuple: (list of strings, ID). We need to map fields to IDs. The text chunk is not fully provided, but we have citations that presumably correspond to parts of the contract. We need to identify which IDs correspond to each field.
+
+We have 10 citations:
+
+1. (['ДОГОВОР'], 1)
+2. (['оказания услуг по организации проведения экзамена на владение русским языком, знание истории России  и основ законодательства РФ для иностранных граждан'], 2)
+3. (['г. Иркутск                                                                              «__» ________201__г.'], 3)
+4. (['Государственное бюджетное профессиональное образовательное учреждение  Иркутской области «Иркутский региональный колледж педагогического образ'], 4)
+5. (['ования» в  лице директора  А.А. Сопина, действующего на основании Устава, распоряжение Министерства образования Иркутской области от'], 5)
+6. (['15.03.2016г. № 43-мр-л (далее –  «Исполнитель»), с одной стороны, и'], 6)
+7. (['наименование организации с указанием должности, фамилии, имени, отчества (при наличии) лица, действующего от имени организации, документов, подтверждающих полномочия указанного лица, направляющей Экзаменуемого'], 7)
+8. (['именуемое в даль'], 8)
+9. (['нейшем «Заказчик», действующий в отношении иностранного гражданина (лица без гражданства), направляемого для получения услуги'], 9)
+10. (['ФИО, паспортные данные лица, получающего услугу по организации проведения Экзамена на владение русским языком, знание истории России и основам законодательства РФ  (далее –'], 10)
+
+We need to map fields:
+
+1. party_1_name — имя или название первой стороны договора.
+2. party_2_name — имя или название второй стороны договора.
+3. contract_date — дата заключения договора.
+4. contract_start — дата начала действия договора.
+5. contract_end — дата окончания действия договора.
+6. subject — предмет договора (товар, услуга и т.д.).
+7. delivery_terms — условия доставки.
+8. payment_terms — условия оплаты.
+9. amount — сумма договора.
+10. currency — валюта договора.
+11. penalty_present — наличие неустойки (да/нет).
+12. penalty_amount_or_formula — сумма неустойки или формула расчета.
+13. extension_possible — возможность продления договора (да/нет).
+14. extension_conditions — условия продления договора.
+15. termination_conditions — условия расторжения договора.
+
+We only have 10 citations. We need to assign IDs to fields that appear. Let's analyze each citation:
+
+1. ['ДОГОВОР'] ID 1: This is just the word "ДОГОВОР". Might be used as a heading. Not a field.
+
+2. ['оказания услуг по организации проведения экзамена на владение русским языком, знание истории России  и основ законодательства РФ для иностранных граждан'] ID 2: This is the subject of the contract: "оказания услуг по организации проведения экзамена на владение русским языком, знание истории России и основ законодательства РФ для иностранных граждан". So subject => ID 2.
+
+3. ['г. Иркутск                                                                              «__» ________201__г.'] ID 3: This is the date of the contract: "г. Иркутск «__» ________201__г." So contract_date => ID 3.
+
+4. ['Государственное бюджетное профессиональное образовательное учреждение  Иркутской области «Иркутский региональный колледж педагогического образ'] ID 4: This is the name of the first party: "Государственное бюджетное профессиональное образовательное учреждение Иркутской области «Иркутский региональный колледж педагогического образования»". So party_1_name => ID 4.
+
+5. ['ования» в  лице директора  А.А. Сопина, действующего на основании Устава, распоряжение Министерства образования Иркутской области от'] ID 5: This is part of the first party's description, maybe still part of party_1_name. But ID 5 might be part of the same party. But we might need to include both IDs 4 and 5 for party_1_name? The instruction: "Если подходящих цитат под одну категорию несколько, то записывай айди в виде листа через запятую". So we can list multiple IDs for a field. So party_1_name could be [4,5] maybe.
+
+6. ['15.03.2016г. № 43-мр-л (далее –  «Исполнитель»), с одной стороны, и'] ID 6: This is the second party: "15.03.2016г. № 43-мр-л (далее – «Исполнитель»), с одной стороны, и". So party_2_name => ID 6.
+
+7. ['наименование организации с указанием должности, фамилии, имени, отчества (при наличии) лица, действующего от имени организации, документов, подтверждающих полномочия указанного лица, направляющей Экзаменуемого'] ID 7: This seems like a clause about the organization name and the person. Might be part of party_2_name or maybe part of the contract details. Hard to say. But likely part of party_2_name or maybe part of the subject? But it's about the organization name and the person. Might be part of party_2_name. But we already have ID 6 for party_2_name. ID 7 might be additional details for party_2_name. So we could include ID 7 as well.
+
+8. ['именуемое в даль'] ID 8: This is incomplete. Might be part of a clause. Hard to interpret. Might be part of the contract. But not sure.
+
+9. ['нейшем «Заказчик», действующий в отношении иностранного гражданина (лица без гражданства), направляемого для получения услуги'] ID 9: This is about the "Заказчик" (customer). Might be the second party? Actually "Заказчик" is the client. But we already have "Исполнитель" as second party. So maybe "Заказчик" is the client. But the contract might involve a third party? But we only have two parties: "Исполнитель" and "Заказчик"? Actually the contract might be between the educational institution (party_1) and the "Заказчик" (client). But ID 6 says "15.03.2016г. № 43-мр-л (далее – «Исполнитель»), с одной стороны, и". So ID 6 is the "Исполнитель" (the educational institution). ID 9 is "Заказчик". So maybe party_2_name is ID 9. But ID 6 might be part of the same party? Actually ID 6 includes "15.03.2016г. № 43-мр-л (далее – «Исполнитель»), с одной стороны, и". That seems to be the start of the clause: "15.03.2016г. № 43-мр-л (далее – «Исполнитель»), с одной стороны, и" which might be the second party. So party_2_name => ID 6. ID 9 might be the "Заказчик" but maybe it's the same as party_2_name? But the contract might be between "Исполнитель" and "Заказчик". So we might treat party_2_name as ID 6 and ID 9? But the instruction: "Если подходящих цитат под одну категорию несколько, то записывай айди в виде листа через запятую". So we can list multiple IDs for party_2_name: [6,9].
+
+10. ['ФИО, паспортные данные лица, получающего услугу по организации проведения Экзамена на владение русским языком, знание истории России и основам законодательства РФ  (далее –'] ID 10: This is about the person receiving the service. Might be part of the subject or part of the parties. But not sure.
+
+We also need contract_start, contract_end, delivery_terms, payment_terms, amount, currency, penalty_present, penalty_amount_or_formula, extension_possible, extension_conditions, termination_conditions. None of the citations mention these. So we skip those fields.
+
+Thus we produce JSON with fields that we can identify: party_1_name, party_2_name, contract_date, subject.
+
+Also maybe we can include party_2_name as [6,9] or [6] only. But ID 9 seems to be "Заказчик". But ID 6 is "Исполнитель". The contract might be between "Исполнитель" and "Заказчик". So we might treat party_1_name as ID 4,5 (the educational institution). party_2_name as ID 6,9 (the client). But ID 7 might also be part of party_2_name? It's about the organization name and the person. But maybe it's part of the "Заказчик" details. So we could include ID 7 as well. But we need to decide.
+
+Let's parse each citation:
+
+ID 4: "Государственное бюджетное профессиональное образовательное учреждение Иркутской области «Иркутский региональный колледж педагогического образ". This is the name of the
+2025-08-30 23:11:43,585: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 23:11:48,610: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 23:11:55,284: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 23:12:04,273: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 23:12:08,061: DEBUG: https://router.huggingface.co:443 "POST /together/v1/chat/completions HTTP/1.1" 200 None
+2025-08-30 23:12:08,074: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-08-30 23:12:08,075: INFO: [generated in 0.00104s] (1, 1, 0)
+2025-08-30 23:12:08,081: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-08-30 23:12:08,081: INFO: [generated in 0.00017s] (1, 1, 0)
+2025-08-30 23:12:08,085: INFO: UPDATE contracts SET citation_data=? WHERE contracts.id = ?
+2025-08-30 23:12:08,085: INFO: [generated in 0.00028s] ('{"subject": [[13, 14, 15], [29], [43], [52], [81, 83]], "contract_start": [[41], [76]], "amount": [[43], [83]], "party_1_name": [[51]], "party_2_name": [[53]], "payment_terms": [[52], [80, 81, 83]], "contract_end": [[77]], "currency": [[83]]}', 1)
+2025-08-30 23:12:08,086: INFO: COMMIT
+2025-08-30 23:12:08,089: INFO: BEGIN (implicit)
+2025-08-30 23:12:08,090: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-08-30 23:12:08,090: INFO: [generated in 0.00018s] (1,)
+2025-08-30 23:12:08,091: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-08-30 23:12:08,091: INFO: [generated in 0.00012s] (1,)
+2025-08-30 23:12:08,092: INFO: COMMIT
+2025-08-30 23:12:08,093: INFO: BEGIN (implicit)
+2025-08-30 23:12:08,093: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-08-30 23:12:08,094: INFO: [generated in 0.00013s] (1,)
+2025-08-30 23:12:08,095: INFO: INSERT INTO contract_citation_links (contract_id, citation_id, field_name) VALUES (?, ?, ?)
+2025-08-30 23:12:08,095: INFO: [generated in 0.00014s] [(1, 13, 'subject'), (1, 14, 'subject'), (1, 15, 'subject'), (1, 29, 'subject'), (1, 43, 'subject'), (1, 52, 'subject'), (1, 81, 'subject'), (1, 83, 'subject')  ... displaying 10 of 14 total bound parameter sets ...  (1, 80, 'payment_terms'), (1, 77, 'contract_end')]
+2025-08-30 23:12:08,095: INFO: COMMIT

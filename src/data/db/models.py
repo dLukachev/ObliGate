@@ -1,7 +1,15 @@
-from sqlalchemy import Column, Float, Integer, String, ForeignKey, DateTime, JSON, Boolean
+from sqlalchemy import Column, Float, Integer, String, ForeignKey, DateTime, JSON, Boolean, Table
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from src.data.db.base import Base
+
+# Модель для связи многие-ко-многим между Contract и Citation
+contract_citation_links = Table(
+    'contract_citation_links', Base.metadata,
+    Column('contract_id', Integer, ForeignKey('contracts.id'), primary_key=True),
+    Column('citation_id', Integer, ForeignKey('citations.id'), primary_key=True),
+    Column('field_name', String(50), nullable=False)  # Имя поля, например "party_1_name"
+)
 
 # Модель для документов
 class Document(Base):
@@ -11,24 +19,10 @@ class Document(Base):
     filename = Column(String, nullable=False)  # Имя файла
     upload_date = Column(DateTime, default=datetime.now())  # Дата загрузки
     file_path = Column(String, nullable=True)  # Путь к файлу (если храним локально)
-    # user_id = Column(Integer, ForeignKey('users.id'), nullable=True)  # Если есть пользователи, FK на пользователя
 
     # Связи
     citations = relationship("Citation", back_populates="document")
-    contract = relationship("Contract", back_populates="document", uselist=False)  # Один договор на документ (предполагаем)
-
-# # Модель для пользователей
-# class User(Base):
-#     __tablename__ = 'users'
-
-#     id = Column(Integer, primary_key=True, index=True)
-#     username = Column(String, unique=True, nullable=False)
-#     email = Column(String, unique=True, nullable=False)
-#     hashed_password = Column(String, nullable=False)  # Для аутентификации
-#     created_at = Column(DateTime, default=datetime.now())
-
-#     # Связи
-#     documents = relationship("Document", back_populates="user")
+    contract = relationship("Contract", back_populates="document", uselist=False)  # Один договор на документ
 
 # Модель для цитат (трассировка к источнику)
 class Citation(Base):
@@ -62,55 +56,26 @@ class Requisites(Base):
 
     contract = relationship("Contract", back_populates="requisites")
 
-# Модель для извлеченной информации из договора (основная схема из DocsInfo)
+# Модель для извлеченной информации из договора (обновленная схема)
 class Contract(Base):
     __tablename__ = 'contracts'
 
     id = Column(Integer, primary_key=True, index=True)
-    document_id = Column(Integer, ForeignKey('documents.id'), nullable=False, unique=True)  # Один договор на документ
+    document_id = Column(Integer, ForeignKey('documents.id'), nullable=False, unique=True)
 
-    # Поля из DocsInfo, каждое ссылается на Citation
-    party_1_name_id = Column(Integer, ForeignKey('citations.id'), nullable=True)
-    party_2_name_id = Column(Integer, ForeignKey('citations.id'), nullable=True)
-    contract_date_id = Column(Integer, ForeignKey('citations.id'), nullable=True)
-    contract_start_id = Column(Integer, ForeignKey('citations.id'), nullable=True)
-    contract_end_id = Column(Integer, ForeignKey('citations.id'), nullable=True)
-    subject_id = Column(Integer, ForeignKey('citations.id'), nullable=True)
-    delivery_terms_id = Column(Integer, ForeignKey('citations.id'), nullable=True)
-    payment_terms_id = Column(Integer, ForeignKey('citations.id'), nullable=True)
-    amount_id = Column(Integer, ForeignKey('citations.id'), nullable=True)
-    currency_id = Column(Integer, ForeignKey('citations.id'), nullable=True)
-    penalty_present_id = Column(Integer, ForeignKey('citations.id'), nullable=True)  # Может быть булевым, но храним как цитату
-    penalty_amount_or_formula_id = Column(Integer, ForeignKey('citations.id'), nullable=True)
-    extension_possible_id = Column(Integer, ForeignKey('citations.id'), nullable=True)
-    extension_conditions_id = Column(Integer, ForeignKey('citations.id'), nullable=True)
-    termination_conditions_id = Column(Integer, ForeignKey('citations.id'), nullable=True)
+    # Удалены отдельные _id поля, так как они заменены таблицей contract_citation_links
+    # Вместо этого добавляем JSON поле для агрегированных данных (опционально)
+    citation_data = Column(JSON, nullable=True)  # {"party_1_name": [6,7,8], "contract_date": [5], ...} для аналитики
 
     parsed_amount = Column(Float, nullable=True)  # Парсенная сумма для удобства
     parsed_currency = Column(String, nullable=True)  # Валюта
     parsed_penalty_present = Column(Boolean, nullable=True)  # Булево для наличия штрафа
 
-    # Связи к цитатам
-    party_1_name = relationship("Citation", foreign_keys=[party_1_name_id])
-    party_2_name = relationship("Citation", foreign_keys=[party_2_name_id])
-    contract_date = relationship("Citation", foreign_keys=[contract_date_id])
-    contract_start = relationship("Citation", foreign_keys=[contract_start_id])
-    contract_end = relationship("Citation", foreign_keys=[contract_end_id])
-    subject = relationship("Citation", foreign_keys=[subject_id])
-    delivery_terms = relationship("Citation", foreign_keys=[delivery_terms_id])
-    payment_terms = relationship("Citation", foreign_keys=[payment_terms_id])
-    amount = relationship("Citation", foreign_keys=[amount_id])
-    currency = relationship("Citation", foreign_keys=[currency_id])
-    penalty_present = relationship("Citation", foreign_keys=[penalty_present_id])
-    penalty_amount_or_formula = relationship("Citation", foreign_keys=[penalty_amount_or_formula_id])
-    extension_possible = relationship("Citation", foreign_keys=[extension_possible_id])
-    extension_conditions = relationship("Citation", foreign_keys=[extension_conditions_id])
-    termination_conditions = relationship("Citation", foreign_keys=[termination_conditions_id])
-
     # Связи
     document = relationship("Document", back_populates="contract")
     requisites = relationship("Requisites", back_populates="contract", uselist=False)  # Одни реквизиты на договор
     obligations = relationship("Obligation", back_populates="contract")  # Множество обязательств
+    citations = relationship("Citation", secondary=contract_citation_links, back_populates="contracts")
 
 # Модель для обязательств/дедлайнов (формируем из извлеченных данных)
 class Obligation(Base):
@@ -140,3 +105,6 @@ class Reminder(Base):
 
     # Связи
     obligation = relationship("Obligation", back_populates="reminders")
+
+# Добавляем связь для Citation к Contract через contract_citation_links
+Citation.contracts = relationship("Contract", secondary=contract_citation_links, back_populates="citations")

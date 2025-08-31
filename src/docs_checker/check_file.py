@@ -1,3 +1,5 @@
+from collections import defaultdict
+import json
 import os
 import sys
 from pathlib import Path
@@ -66,8 +68,8 @@ def llm(prompt: str, context: str | None, retries: int = 3):
             response = client.chat.completions.create(
                 messages=[{"role": "user", "content": prompt, "context": context if context is not None else 'Первое сообщение, контекста нет.'}],
                 max_tokens=2048,
-                temperature=0.55,
-                top_p=0.55,
+                temperature=0.2,
+                top_p=0.2,
                 stream=False
             )
             content = response.choices[0].message.content.strip() # type: ignore
@@ -90,10 +92,12 @@ def get_and_send_to_llm(document_id: int):
     data = []
     size = 0
     count = 0
+    result_processing = []
+    merged_dict = defaultdict(list)
     for citation in result:
         data.append(([citation.text], citation.id))
         size += len(citation.text) # type: ignore  (and count <= 20)
-        if size > 1500:
+        if size > 1000 and count <= 5:
             # Обработка чанка (очистка, фильтрация и т.д.)
             cleaned_data = [item for item in data if item[0]]  # Пример: убираем пустые строки
             if cleaned_data:
@@ -101,11 +105,50 @@ def get_and_send_to_llm(document_id: int):
                 try:
                     content, response = llm(SYS_PROMPT.format(citation=cleaned_data), context=response if response is not None else None) # type: ignore
                     print(f"Ответ ИИ - {content}")
+                    try:
+                        chunk_dict = json.loads(content)
+                        result_processing.append(chunk_dict)
+                    except json.JSONDecodeError:
+                        logger.error(f"Ошибка парсинга JSON: {content}")
                 except Exception as e:
                     print(f'Ошибка - {e}')
             count += 1
             size = 0
             data = []
+
+    for chunk_dict in result_processing:
+        if not isinstance(chunk_dict, dict):
+            logger.error(f"Некорректный формат в result_processing: {chunk_dict}")
+            continue
+        for key, value in chunk_dict.items():
+            if not isinstance(value, list):
+                value = [value]
+            merged_dict[key].append(value)
+    
+    result = dict(merged_dict)
+    # Получение или создание контракта
+    contract = repo.get_contract_by_document(document_id)
+    if not contract:
+        contract = repo.create_contract(document_id, citation_data=merged_dict)
+    else:
+        repo.update_contract(contract.id, citation_data=merged_dict) # type: ignore
+
+    # Удаление существующих связей перед вставкой новых
+    repo.delete_citation_links(contract.id) # type: ignore
+
+    # Сохранение связей с цитатами с удалением дубликатов
+    links = []
+    seen = set()  # Для отслеживания уникальных комбинаций (contract_id, citation_id)
+    for field_name, id_lists in merged_dict.items():
+        for id_list in id_lists:
+            for citation_id in id_list:
+                if (contract.id, citation_id) not in seen:
+                    links.append({'citation_id': citation_id, 'field_name': field_name})
+                    seen.add((contract.id, citation_id))
+    if links:
+        repo.bulk_create_citation_links(contract.id, links) # type: ignore
+
+    return result
 
 if __name__ == "__main__":
     document_id = 1
