@@ -1,4 +1,5 @@
 from collections import defaultdict
+from datetime import datetime
 import json
 import os
 import sys
@@ -12,6 +13,7 @@ sys.path.append(str(BASE_DIR))
 from dotenv import load_dotenv
 from huggingface_hub import InferenceClient
 from src.data.db.base import get_db_session
+from src.utils.remind import set_reminder
 from src.repositories.contract_repo import ContractRepository
 
 load_dotenv()
@@ -147,6 +149,8 @@ def get_and_send_to_llm(document_id: int):
                     seen.add((contract.id, citation_id))
     if links:
         repo.bulk_create_citation_links(contract.id, links) # type: ignore
+
+    set_reminder(result, datetime.now())
 
     return result
 

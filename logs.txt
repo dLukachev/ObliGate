@@ -1150,3 +1150,1139 @@ def process_document(document_id, file_path):
     return 1
 
 2025-09-03 14:44:09,774: INFO: ROLLBACK
+2025-09-03 15:18:05,371: DEBUG: 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2025-09-03 15:18:05,372: DEBUG: 
+def xmap(task, it):
+    return 1
+
+2025-09-03 15:18:05,372: DEBUG: 
+def file_extract(document):
+    return 1
+
+2025-09-03 15:18:05,372: DEBUG: 
+def backend_cleanup():
+    return 1
+
+2025-09-03 15:18:05,372: DEBUG: 
+def chain(*args, **kwargs):
+    return 1
+
+2025-09-03 15:18:05,373: DEBUG: 
+def xstarmap(task, it):
+    return 1
+
+2025-09-03 15:18:05,373: DEBUG: 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2025-09-03 15:18:05,373: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-03 15:18:05,373: DEBUG: 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2025-09-03 15:18:05,373: DEBUG: 
+def async_set_redis(key, value, expire=0):
+    return 1
+
+2025-09-03 15:18:05,373: DEBUG: 
+def chunks(task, it, n):
+    return 1
+
+2025-09-03 15:18:05,374: DEBUG: 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2025-09-03 15:21:17,647: DEBUG: 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2025-09-03 15:21:17,648: DEBUG: 
+def xmap(task, it):
+    return 1
+
+2025-09-03 15:21:17,648: DEBUG: 
+def file_extract(document):
+    return 1
+
+2025-09-03 15:21:17,649: DEBUG: 
+def backend_cleanup():
+    return 1
+
+2025-09-03 15:21:17,649: DEBUG: 
+def chain(*args, **kwargs):
+    return 1
+
+2025-09-03 15:21:17,649: DEBUG: 
+def xstarmap(task, it):
+    return 1
+
+2025-09-03 15:21:17,649: DEBUG: 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2025-09-03 15:21:17,649: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-03 15:21:17,649: DEBUG: 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2025-09-03 15:21:17,650: DEBUG: 
+def async_set_redis(key, value, expire=0):
+    return 1
+
+2025-09-03 15:21:17,650: DEBUG: 
+def chunks(task, it, n):
+    return 1
+
+2025-09-03 15:21:17,650: DEBUG: 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2025-09-03 15:25:46,812: DEBUG: 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2025-09-03 15:25:46,812: DEBUG: 
+def xmap(task, it):
+    return 1
+
+2025-09-03 15:25:46,812: DEBUG: 
+def backend_cleanup():
+    return 1
+
+2025-09-03 15:25:46,812: DEBUG: 
+def async_set_redis(key, value, expire=0):
+    return 1
+
+2025-09-03 15:25:46,812: DEBUG: 
+def file_extract(document):
+    return 1
+
+2025-09-03 15:25:46,812: DEBUG: 
+def chain(*args, **kwargs):
+    return 1
+
+2025-09-03 15:25:46,813: DEBUG: 
+def xstarmap(task, it):
+    return 1
+
+2025-09-03 15:25:46,813: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-03 15:25:46,813: DEBUG: 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2025-09-03 15:25:46,813: DEBUG: 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2025-09-03 15:25:46,813: DEBUG: 
+def chunks(task, it, n):
+    return 1
+
+2025-09-03 15:25:46,813: DEBUG: 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2025-09-03 15:28:20,763: DEBUG: 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2025-09-03 15:28:20,763: DEBUG: 
+def xmap(task, it):
+    return 1
+
+2025-09-03 15:28:20,763: DEBUG: 
+def backend_cleanup():
+    return 1
+
+2025-09-03 15:28:20,763: DEBUG: 
+def async_set_redis(key, value, expire=0):
+    return 1
+
+2025-09-03 15:28:20,763: DEBUG: 
+def file_extract(document):
+    return 1
+
+2025-09-03 15:28:20,764: DEBUG: 
+def chain(*args, **kwargs):
+    return 1
+
+2025-09-03 15:28:20,764: DEBUG: 
+def xstarmap(task, it):
+    return 1
+
+2025-09-03 15:28:20,764: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-03 15:28:20,764: DEBUG: 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2025-09-03 15:28:20,764: DEBUG: 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2025-09-03 15:28:20,764: DEBUG: 
+def chunks(task, it, n):
+    return 1
+
+2025-09-03 15:28:20,764: DEBUG: 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2025-09-03 15:29:04,719: DEBUG: 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2025-09-03 15:29:04,719: DEBUG: 
+def xmap(task, it):
+    return 1
+
+2025-09-03 15:29:04,719: DEBUG: 
+def backend_cleanup():
+    return 1
+
+2025-09-03 15:29:04,719: DEBUG: 
+def async_set_redis(key, value, expire=0):
+    return 1
+
+2025-09-03 15:29:04,719: DEBUG: 
+def file_extract(document):
+    return 1
+
+2025-09-03 15:29:04,719: DEBUG: 
+def chain(*args, **kwargs):
+    return 1
+
+2025-09-03 15:29:04,720: DEBUG: 
+def xstarmap(task, it):
+    return 1
+
+2025-09-03 15:29:04,720: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-03 15:29:04,720: DEBUG: 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2025-09-03 15:29:04,720: DEBUG: 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2025-09-03 15:29:04,720: DEBUG: 
+def chunks(task, it, n):
+    return 1
+
+2025-09-03 15:29:04,720: DEBUG: 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2025-09-03 15:29:32,128: DEBUG: 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2025-09-03 15:29:32,129: DEBUG: 
+def xmap(task, it):
+    return 1
+
+2025-09-03 15:29:32,129: DEBUG: 
+def backend_cleanup():
+    return 1
+
+2025-09-03 15:29:32,129: DEBUG: 
+def async_set_redis(key, value, expire=0):
+    return 1
+
+2025-09-03 15:29:32,129: DEBUG: 
+def file_extract(document):
+    return 1
+
+2025-09-03 15:29:32,129: DEBUG: 
+def chain(*args, **kwargs):
+    return 1
+
+2025-09-03 15:29:32,129: DEBUG: 
+def xstarmap(task, it):
+    return 1
+
+2025-09-03 15:29:32,129: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-03 15:29:32,129: DEBUG: 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2025-09-03 15:29:32,129: DEBUG: 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2025-09-03 15:29:32,130: DEBUG: 
+def chunks(task, it, n):
+    return 1
+
+2025-09-03 15:29:32,130: DEBUG: 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2025-09-03 15:30:16,665: DEBUG: 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2025-09-03 15:30:16,665: DEBUG: 
+def xmap(task, it):
+    return 1
+
+2025-09-03 15:30:16,665: DEBUG: 
+def backend_cleanup():
+    return 1
+
+2025-09-03 15:30:16,665: DEBUG: 
+def async_set_redis(key, value, expire=0):
+    return 1
+
+2025-09-03 15:30:16,665: DEBUG: 
+def file_extract(document):
+    return 1
+
+2025-09-03 15:30:16,666: DEBUG: 
+def chain(*args, **kwargs):
+    return 1
+
+2025-09-03 15:30:16,666: DEBUG: 
+def xstarmap(task, it):
+    return 1
+
+2025-09-03 15:30:16,666: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-03 15:30:16,666: DEBUG: 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2025-09-03 15:30:16,666: DEBUG: 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2025-09-03 15:30:16,666: DEBUG: 
+def chunks(task, it, n):
+    return 1
+
+2025-09-03 15:30:16,666: DEBUG: 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2025-09-03 15:33:09,616: DEBUG: 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2025-09-03 15:33:09,616: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-03 15:33:09,616: DEBUG: 
+def xmap(task, it):
+    return 1
+
+2025-09-03 15:33:09,616: DEBUG: 
+def backend_cleanup():
+    return 1
+
+2025-09-03 15:33:09,617: DEBUG: 
+def async_set_redis(key, value, expire=0):
+    return 1
+
+2025-09-03 15:33:09,617: DEBUG: 
+def remind(message, time):
+    return 1
+
+2025-09-03 15:33:09,617: DEBUG: 
+def chain(*args, **kwargs):
+    return 1
+
+2025-09-03 15:33:09,617: DEBUG: 
+def xstarmap(task, it):
+    return 1
+
+2025-09-03 15:33:09,617: DEBUG: 
+def file_extract(document):
+    return 1
+
+2025-09-03 15:33:09,617: DEBUG: 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2025-09-03 15:33:09,617: DEBUG: 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2025-09-03 15:33:09,617: DEBUG: 
+def chunks(task, it, n):
+    return 1
+
+2025-09-03 15:33:09,617: DEBUG: 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2025-09-03 15:33:14,721: DEBUG: 
+def remind(message, time):
+    return 1
+
+2025-09-03 15:34:06,793: DEBUG: 
+def remind(message, time):
+    return 1
+
+2025-09-03 15:35:33,939: DEBUG: 
+def remind(message, time):
+    return 1
+
+2025-09-03 15:37:57,072: DEBUG: 
+def remind(message, time):
+    return 1
+
+2025-09-03 15:48:54,097: DEBUG: 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2025-09-03 15:48:54,098: DEBUG: 
+def async_set_redis(key, value, expire=0):
+    return 1
+
+2025-09-03 15:48:54,098: DEBUG: 
+def chunks(task, it, n):
+    return 1
+
+2025-09-03 15:48:54,098: DEBUG: 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2025-09-03 15:48:54,098: DEBUG: 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2025-09-03 15:48:54,098: DEBUG: 
+def xmap(task, it):
+    return 1
+
+2025-09-03 15:48:54,098: DEBUG: 
+def backend_cleanup():
+    return 1
+
+2025-09-03 15:48:54,098: DEBUG: 
+def file_extract(document):
+    return 1
+
+2025-09-03 15:48:54,098: DEBUG: 
+def remind(message, time):
+    return 1
+
+2025-09-03 15:48:54,099: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-03 15:48:54,099: DEBUG: 
+def chain(*args, **kwargs):
+    return 1
+
+2025-09-03 15:48:54,099: DEBUG: 
+def xstarmap(task, it):
+    return 1
+
+2025-09-03 15:48:54,099: DEBUG: 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2025-09-03 15:49:13,056: INFO: BEGIN (implicit)
+2025-09-03 15:49:13,056: INFO: PRAGMA main.table_info("contract_citation_links")
+2025-09-03 15:49:13,056: INFO: [raw sql] ()
+2025-09-03 15:49:13,057: INFO: PRAGMA main.table_info("documents")
+2025-09-03 15:49:13,057: INFO: [raw sql] ()
+2025-09-03 15:49:13,057: INFO: PRAGMA main.table_info("citations")
+2025-09-03 15:49:13,057: INFO: [raw sql] ()
+2025-09-03 15:49:13,057: INFO: PRAGMA main.table_info("requisites")
+2025-09-03 15:49:13,057: INFO: [raw sql] ()
+2025-09-03 15:49:13,057: INFO: PRAGMA main.table_info("contracts")
+2025-09-03 15:49:13,057: INFO: [raw sql] ()
+2025-09-03 15:49:13,057: INFO: PRAGMA main.table_info("obligations")
+2025-09-03 15:49:13,057: INFO: [raw sql] ()
+2025-09-03 15:49:13,057: INFO: PRAGMA main.table_info("reminders")
+2025-09-03 15:49:13,057: INFO: [raw sql] ()
+2025-09-03 15:49:13,057: INFO: COMMIT
+2025-09-03 15:49:25,579: INFO: BEGIN (implicit)
+2025-09-03 15:49:25,579: INFO: PRAGMA main.table_info("contract_citation_links")
+2025-09-03 15:49:25,579: INFO: [raw sql] ()
+2025-09-03 15:49:25,580: INFO: PRAGMA main.table_info("documents")
+2025-09-03 15:49:25,580: INFO: [raw sql] ()
+2025-09-03 15:49:25,580: INFO: PRAGMA main.table_info("citations")
+2025-09-03 15:49:25,580: INFO: [raw sql] ()
+2025-09-03 15:49:25,580: INFO: PRAGMA main.table_info("requisites")
+2025-09-03 15:49:25,580: INFO: [raw sql] ()
+2025-09-03 15:49:25,580: INFO: PRAGMA main.table_info("contracts")
+2025-09-03 15:49:25,580: INFO: [raw sql] ()
+2025-09-03 15:49:25,580: INFO: PRAGMA main.table_info("obligations")
+2025-09-03 15:49:25,580: INFO: [raw sql] ()
+2025-09-03 15:49:25,580: INFO: PRAGMA main.table_info("reminders")
+2025-09-03 15:49:25,580: INFO: [raw sql] ()
+2025-09-03 15:49:25,580: INFO: COMMIT
+2025-09-03 15:49:33,896: INFO: BEGIN (implicit)
+2025-09-03 15:49:33,896: INFO: PRAGMA main.table_info("contract_citation_links")
+2025-09-03 15:49:33,896: INFO: [raw sql] ()
+2025-09-03 15:49:33,896: INFO: PRAGMA main.table_info("documents")
+2025-09-03 15:49:33,896: INFO: [raw sql] ()
+2025-09-03 15:49:33,896: INFO: PRAGMA main.table_info("citations")
+2025-09-03 15:49:33,896: INFO: [raw sql] ()
+2025-09-03 15:49:33,896: INFO: PRAGMA main.table_info("requisites")
+2025-09-03 15:49:33,896: INFO: [raw sql] ()
+2025-09-03 15:49:33,896: INFO: PRAGMA main.table_info("contracts")
+2025-09-03 15:49:33,896: INFO: [raw sql] ()
+2025-09-03 15:49:33,896: INFO: PRAGMA main.table_info("obligations")
+2025-09-03 15:49:33,896: INFO: [raw sql] ()
+2025-09-03 15:49:33,897: INFO: PRAGMA main.table_info("reminders")
+2025-09-03 15:49:33,897: INFO: [raw sql] ()
+2025-09-03 15:49:33,897: INFO: COMMIT
+2025-09-03 16:01:33,756: INFO: BEGIN (implicit)
+2025-09-03 16:01:33,756: INFO: PRAGMA main.table_info("contract_citation_links")
+2025-09-03 16:01:33,756: INFO: [raw sql] ()
+2025-09-03 16:01:33,757: INFO: PRAGMA main.table_info("documents")
+2025-09-03 16:01:33,757: INFO: [raw sql] ()
+2025-09-03 16:01:33,757: INFO: PRAGMA main.table_info("citations")
+2025-09-03 16:01:33,757: INFO: [raw sql] ()
+2025-09-03 16:01:33,757: INFO: PRAGMA main.table_info("requisites")
+2025-09-03 16:01:33,757: INFO: [raw sql] ()
+2025-09-03 16:01:33,757: INFO: PRAGMA main.table_info("contracts")
+2025-09-03 16:01:33,757: INFO: [raw sql] ()
+2025-09-03 16:01:33,757: INFO: PRAGMA main.table_info("obligations")
+2025-09-03 16:01:33,757: INFO: [raw sql] ()
+2025-09-03 16:01:33,757: INFO: PRAGMA main.table_info("reminders")
+2025-09-03 16:01:33,757: INFO: [raw sql] ()
+2025-09-03 16:01:33,758: INFO: COMMIT
+2025-09-03 16:02:21,639: DEBUG: 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2025-09-03 16:02:21,639: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-03 16:02:21,639: DEBUG: 
+def chunks(task, it, n):
+    return 1
+
+2025-09-03 16:02:21,640: DEBUG: 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2025-09-03 16:02:21,640: DEBUG: 
+def async_set_redis(key, value, expire=0):
+    return 1
+
+2025-09-03 16:02:21,640: DEBUG: 
+def remind(message, time):
+    return 1
+
+2025-09-03 16:02:21,640: DEBUG: 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2025-09-03 16:02:21,640: DEBUG: 
+def file_extract(document):
+    return 1
+
+2025-09-03 16:02:21,640: DEBUG: 
+def xmap(task, it):
+    return 1
+
+2025-09-03 16:02:21,640: DEBUG: 
+def backend_cleanup():
+    return 1
+
+2025-09-03 16:02:21,640: DEBUG: 
+def chain(*args, **kwargs):
+    return 1
+
+2025-09-03 16:02:21,640: DEBUG: 
+def xstarmap(task, it):
+    return 1
+
+2025-09-03 16:02:21,640: DEBUG: 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2025-09-03 16:03:18,148: DEBUG: 
+def remind(message, time):
+    return 1
+
+2025-09-03 16:05:46,547: DEBUG: 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2025-09-03 16:05:46,547: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-03 16:05:46,548: DEBUG: 
+def chunks(task, it, n):
+    return 1
+
+2025-09-03 16:05:46,548: DEBUG: 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2025-09-03 16:05:46,548: DEBUG: 
+def async_set_redis(key, value, expire=0):
+    return 1
+
+2025-09-03 16:05:46,548: DEBUG: 
+def remind(message, time):
+    return 1
+
+2025-09-03 16:05:46,548: DEBUG: 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2025-09-03 16:05:46,548: DEBUG: 
+def file_extract(document):
+    return 1
+
+2025-09-03 16:05:46,548: DEBUG: 
+def xmap(task, it):
+    return 1
+
+2025-09-03 16:05:46,548: DEBUG: 
+def backend_cleanup():
+    return 1
+
+2025-09-03 16:05:46,548: DEBUG: 
+def chain(*args, **kwargs):
+    return 1
+
+2025-09-03 16:05:46,548: DEBUG: 
+def xstarmap(task, it):
+    return 1
+
+2025-09-03 16:05:46,548: DEBUG: 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2025-09-03 16:05:56,410: DEBUG: 
+def remind(message, time):
+    return 1
+
+2025-09-03 16:09:09,511: DEBUG: 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2025-09-03 16:09:09,511: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-03 16:09:09,511: DEBUG: 
+def chunks(task, it, n):
+    return 1
+
+2025-09-03 16:09:09,511: DEBUG: 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2025-09-03 16:09:09,511: DEBUG: 
+def async_set_redis(key, value, expire=0):
+    return 1
+
+2025-09-03 16:09:09,511: DEBUG: 
+def remind(message, time):
+    return 1
+
+2025-09-03 16:09:09,512: DEBUG: 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2025-09-03 16:09:09,512: DEBUG: 
+def file_extract(document):
+    return 1
+
+2025-09-03 16:09:09,512: DEBUG: 
+def xmap(task, it):
+    return 1
+
+2025-09-03 16:09:09,512: DEBUG: 
+def backend_cleanup():
+    return 1
+
+2025-09-03 16:09:09,512: DEBUG: 
+def chain(*args, **kwargs):
+    return 1
+
+2025-09-03 16:09:09,512: DEBUG: 
+def xstarmap(task, it):
+    return 1
+
+2025-09-03 16:09:09,512: DEBUG: 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2025-09-03 16:09:24,794: DEBUG: 
+def remind(message, time):
+    return 1
+
+2025-09-03 16:10:33,353: DEBUG: 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2025-09-03 16:10:33,354: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-03 16:10:33,354: DEBUG: 
+def chunks(task, it, n):
+    return 1
+
+2025-09-03 16:10:33,354: DEBUG: 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2025-09-03 16:10:33,354: DEBUG: 
+def async_set_redis(key, value, expire=0):
+    return 1
+
+2025-09-03 16:10:33,354: DEBUG: 
+def remind(message, time):
+    return 1
+
+2025-09-03 16:10:33,354: DEBUG: 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2025-09-03 16:10:33,354: DEBUG: 
+def file_extract(document):
+    return 1
+
+2025-09-03 16:10:33,354: DEBUG: 
+def xmap(task, it):
+    return 1
+
+2025-09-03 16:10:33,355: DEBUG: 
+def backend_cleanup():
+    return 1
+
+2025-09-03 16:10:33,355: DEBUG: 
+def chain(*args, **kwargs):
+    return 1
+
+2025-09-03 16:10:33,355: DEBUG: 
+def xstarmap(task, it):
+    return 1
+
+2025-09-03 16:10:33,355: DEBUG: 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2025-09-03 16:10:43,580: DEBUG: 
+def remind(message, time):
+    return 1
+
+2025-09-03 16:12:24,114: DEBUG: 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2025-09-03 16:12:24,114: DEBUG: 
+def chunks(task, it, n):
+    return 1
+
+2025-09-03 16:12:24,115: DEBUG: 
+def remind(message, time):
+    return 1
+
+2025-09-03 16:12:24,115: DEBUG: 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2025-09-03 16:12:24,115: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-03 16:12:24,115: DEBUG: 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2025-09-03 16:12:24,115: DEBUG: 
+def xmap(task, it):
+    return 1
+
+2025-09-03 16:12:24,115: DEBUG: 
+def async_set_redis(key, value, expire=0):
+    return 1
+
+2025-09-03 16:12:24,115: DEBUG: 
+def backend_cleanup():
+    return 1
+
+2025-09-03 16:12:24,115: DEBUG: 
+def chain(*args, **kwargs):
+    return 1
+
+2025-09-03 16:12:24,115: DEBUG: 
+def xstarmap(task, it):
+    return 1
+
+2025-09-03 16:12:24,115: DEBUG: 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2025-09-03 16:12:24,115: DEBUG: 
+def file_extract(document):
+    return 1
+
+2025-09-03 16:12:29,401: DEBUG: 
+def remind(message, time):
+    return 1
+
+2025-09-03 16:13:09,922: DEBUG: 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2025-09-03 16:13:09,922: DEBUG: 
+def chunks(task, it, n):
+    return 1
+
+2025-09-03 16:13:09,922: DEBUG: 
+def remind(message, time):
+    return 1
+
+2025-09-03 16:13:09,923: DEBUG: 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2025-09-03 16:13:09,923: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-03 16:13:09,923: DEBUG: 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2025-09-03 16:13:09,923: DEBUG: 
+def xmap(task, it):
+    return 1
+
+2025-09-03 16:13:09,923: DEBUG: 
+def async_set_redis(key, value, expire=0):
+    return 1
+
+2025-09-03 16:13:09,923: DEBUG: 
+def backend_cleanup():
+    return 1
+
+2025-09-03 16:13:09,923: DEBUG: 
+def chain(*args, **kwargs):
+    return 1
+
+2025-09-03 16:13:09,923: DEBUG: 
+def xstarmap(task, it):
+    return 1
+
+2025-09-03 16:13:09,923: DEBUG: 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2025-09-03 16:13:09,923: DEBUG: 
+def file_extract(document):
+    return 1
+
+2025-09-03 16:13:15,596: DEBUG: 
+def remind(message, time):
+    return 1
+
+2025-09-03 16:14:23,978: DEBUG: 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2025-09-03 16:14:23,978: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-03 16:14:23,979: DEBUG: 
+def chunks(task, it, n):
+    return 1
+
+2025-09-03 16:14:23,979: DEBUG: 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2025-09-03 16:14:23,979: DEBUG: 
+def async_set_redis(key, value, expire=0):
+    return 1
+
+2025-09-03 16:14:23,979: DEBUG: 
+def remind(message, time):
+    return 1
+
+2025-09-03 16:14:23,979: DEBUG: 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2025-09-03 16:14:23,979: DEBUG: 
+def file_extract(document):
+    return 1
+
+2025-09-03 16:14:23,979: DEBUG: 
+def xmap(task, it):
+    return 1
+
+2025-09-03 16:14:23,979: DEBUG: 
+def backend_cleanup():
+    return 1
+
+2025-09-03 16:14:23,979: DEBUG: 
+def chain(*args, **kwargs):
+    return 1
+
+2025-09-03 16:14:23,979: DEBUG: 
+def xstarmap(task, it):
+    return 1
+
+2025-09-03 16:14:23,979: DEBUG: 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2025-09-03 16:14:29,502: DEBUG: 
+def remind(message, time):
+    return 1
+
+2025-09-03 16:16:05,705: DEBUG: 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2025-09-03 16:16:05,705: DEBUG: 
+def chunks(task, it, n):
+    return 1
+
+2025-09-03 16:16:05,706: DEBUG: 
+def file_extract(document):
+    return 1
+
+2025-09-03 16:16:05,706: DEBUG: 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2025-09-03 16:16:05,706: DEBUG: 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2025-09-03 16:16:05,706: DEBUG: 
+def xmap(task, it):
+    return 1
+
+2025-09-03 16:16:05,706: DEBUG: 
+def async_set_redis(key, value, expire=0):
+    return 1
+
+2025-09-03 16:16:05,706: DEBUG: 
+def backend_cleanup():
+    return 1
+
+2025-09-03 16:16:05,706: DEBUG: 
+def remind(message, time):
+    return 1
+
+2025-09-03 16:16:05,706: DEBUG: 
+def chain(*args, **kwargs):
+    return 1
+
+2025-09-03 16:16:05,706: DEBUG: 
+def xstarmap(task, it):
+    return 1
+
+2025-09-03 16:16:05,706: DEBUG: 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2025-09-03 16:16:05,706: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-03 16:16:11,067: DEBUG: 
+def remind(message, time):
+    return 1
+
+2025-09-03 16:19:50,487: DEBUG: 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2025-09-03 16:19:50,487: DEBUG: 
+def chunks(task, it, n):
+    return 1
+
+2025-09-03 16:19:50,488: DEBUG: 
+def file_extract(document):
+    return 1
+
+2025-09-03 16:19:50,488: DEBUG: 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2025-09-03 16:19:50,488: DEBUG: 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2025-09-03 16:19:50,488: DEBUG: 
+def xmap(task, it):
+    return 1
+
+2025-09-03 16:19:50,488: DEBUG: 
+def async_set_redis(key, value, expire=0):
+    return 1
+
+2025-09-03 16:19:50,488: DEBUG: 
+def backend_cleanup():
+    return 1
+
+2025-09-03 16:19:50,488: DEBUG: 
+def remind(message, time):
+    return 1
+
+2025-09-03 16:19:50,488: DEBUG: 
+def chain(*args, **kwargs):
+    return 1
+
+2025-09-03 16:19:50,488: DEBUG: 
+def xstarmap(task, it):
+    return 1
+
+2025-09-03 16:19:50,488: DEBUG: 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2025-09-03 16:19:50,488: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-03 16:20:01,815: DEBUG: 
+def remind(message, time):
+    return 1
+
+2025-09-03 16:21:20,198: DEBUG: 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2025-09-03 16:21:20,198: DEBUG: 
+def chunks(task, it, n):
+    return 1
+
+2025-09-03 16:21:20,198: DEBUG: 
+def file_extract(document):
+    return 1
+
+2025-09-03 16:21:20,198: DEBUG: 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2025-09-03 16:21:20,198: DEBUG: 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2025-09-03 16:21:20,199: DEBUG: 
+def xmap(task, it):
+    return 1
+
+2025-09-03 16:21:20,199: DEBUG: 
+def async_set_redis(key, value, expire=0):
+    return 1
+
+2025-09-03 16:21:20,199: DEBUG: 
+def backend_cleanup():
+    return 1
+
+2025-09-03 16:21:20,199: DEBUG: 
+def remind(message, time):
+    return 1
+
+2025-09-03 16:21:20,199: DEBUG: 
+def chain(*args, **kwargs):
+    return 1
+
+2025-09-03 16:21:20,199: DEBUG: 
+def xstarmap(task, it):
+    return 1
+
+2025-09-03 16:21:20,199: DEBUG: 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2025-09-03 16:21:20,199: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-03 16:21:29,169: DEBUG: 
+def remind(message, time):
+    return 1
+
+2025-09-03 16:49:58,224: DEBUG: 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2025-09-03 16:49:58,224: DEBUG: 
+def chunks(task, it, n):
+    return 1
+
+2025-09-03 16:49:58,224: DEBUG: 
+def file_extract(document):
+    return 1
+
+2025-09-03 16:49:58,225: DEBUG: 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2025-09-03 16:49:58,225: DEBUG: 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2025-09-03 16:49:58,225: DEBUG: 
+def xmap(task, it):
+    return 1
+
+2025-09-03 16:49:58,225: DEBUG: 
+def async_set_redis(key, value, expire=0):
+    return 1
+
+2025-09-03 16:49:58,225: DEBUG: 
+def backend_cleanup():
+    return 1
+
+2025-09-03 16:49:58,225: DEBUG: 
+def remind(message, time):
+    return 1
+
+2025-09-03 16:49:58,225: DEBUG: 
+def chain(*args, **kwargs):
+    return 1
+
+2025-09-03 16:49:58,225: DEBUG: 
+def xstarmap(task, it):
+    return 1
+
+2025-09-03 16:49:58,225: DEBUG: 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2025-09-03 16:49:58,225: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-03 16:50:05,292: DEBUG: 
+def remind(message, time):
+    return 1
+
