@@ -97,7 +97,7 @@ def get_and_send_to_llm(document_id: int):
     for citation in result:
         data.append(([citation.text], citation.id))
         size += len(citation.text) # type: ignore  (and count <= 20)
-        if size > 1000 and count <= 5:
+        if size > 900 and count <= 5:
             # Обработка чанка (очистка, фильтрация и т.д.)
             cleaned_data = [item for item in data if item[0]]  # Пример: убираем пустые строки
             if cleaned_data:
@@ -150,6 +150,6 @@ def get_and_send_to_llm(document_id: int):
 
     return result
 
-if __name__ == "__main__":
-    document_id = 1
-    get_and_send_to_llm(document_id)
+# if __name__ == "__main__":
+#     document_id = 1
+#     get_and_send_to_llm(document_id)

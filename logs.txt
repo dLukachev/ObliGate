@@ -339,3 +339,814 @@ WHERE contracts.id = ?
 2025-08-30 23:12:08,095: INFO: INSERT INTO contract_citation_links (contract_id, citation_id, field_name) VALUES (?, ?, ?)
 2025-08-30 23:12:08,095: INFO: [generated in 0.00014s] [(1, 13, 'subject'), (1, 14, 'subject'), (1, 15, 'subject'), (1, 29, 'subject'), (1, 43, 'subject'), (1, 52, 'subject'), (1, 81, 'subject'), (1, 83, 'subject')  ... displaying 10 of 14 total bound parameter sets ...  (1, 80, 'payment_terms'), (1, 77, 'contract_end')]
 2025-08-30 23:12:08,095: INFO: COMMIT
+2025-09-03 14:29:58,693: INFO: BEGIN (implicit)
+2025-09-03 14:29:58,693: INFO: PRAGMA main.table_info("contract_citation_links")
+2025-09-03 14:29:58,693: INFO: [raw sql] ()
+2025-09-03 14:29:58,694: INFO: PRAGMA main.table_info("documents")
+2025-09-03 14:29:58,694: INFO: [raw sql] ()
+2025-09-03 14:29:58,694: INFO: PRAGMA main.table_info("citations")
+2025-09-03 14:29:58,694: INFO: [raw sql] ()
+2025-09-03 14:29:58,694: INFO: PRAGMA main.table_info("requisites")
+2025-09-03 14:29:58,694: INFO: [raw sql] ()
+2025-09-03 14:29:58,694: INFO: PRAGMA main.table_info("contracts")
+2025-09-03 14:29:58,694: INFO: [raw sql] ()
+2025-09-03 14:29:58,694: INFO: PRAGMA main.table_info("obligations")
+2025-09-03 14:29:58,694: INFO: [raw sql] ()
+2025-09-03 14:29:58,694: INFO: PRAGMA main.table_info("reminders")
+2025-09-03 14:29:58,694: INFO: [raw sql] ()
+2025-09-03 14:29:58,695: INFO: COMMIT
+2025-09-03 14:30:20,888: INFO: BEGIN (implicit)
+2025-09-03 14:30:20,888: INFO: PRAGMA main.table_info("contract_citation_links")
+2025-09-03 14:30:20,888: INFO: [raw sql] ()
+2025-09-03 14:30:20,889: INFO: PRAGMA main.table_info("documents")
+2025-09-03 14:30:20,889: INFO: [raw sql] ()
+2025-09-03 14:30:20,889: INFO: PRAGMA main.table_info("citations")
+2025-09-03 14:30:20,889: INFO: [raw sql] ()
+2025-09-03 14:30:20,889: INFO: PRAGMA main.table_info("requisites")
+2025-09-03 14:30:20,889: INFO: [raw sql] ()
+2025-09-03 14:30:20,889: INFO: PRAGMA main.table_info("contracts")
+2025-09-03 14:30:20,889: INFO: [raw sql] ()
+2025-09-03 14:30:20,889: INFO: PRAGMA main.table_info("obligations")
+2025-09-03 14:30:20,889: INFO: [raw sql] ()
+2025-09-03 14:30:20,889: INFO: PRAGMA main.table_info("reminders")
+2025-09-03 14:30:20,889: INFO: [raw sql] ()
+2025-09-03 14:30:20,889: INFO: COMMIT
+2025-09-03 14:31:06,746: INFO: BEGIN (implicit)
+2025-09-03 14:31:06,746: INFO: PRAGMA main.table_info("contract_citation_links")
+2025-09-03 14:31:06,746: INFO: [raw sql] ()
+2025-09-03 14:31:06,747: INFO: PRAGMA temp.table_info("contract_citation_links")
+2025-09-03 14:31:06,747: INFO: [raw sql] ()
+2025-09-03 14:31:06,747: INFO: PRAGMA main.table_info("documents")
+2025-09-03 14:31:06,747: INFO: [raw sql] ()
+2025-09-03 14:31:06,747: INFO: PRAGMA temp.table_info("documents")
+2025-09-03 14:31:06,747: INFO: [raw sql] ()
+2025-09-03 14:31:06,747: INFO: PRAGMA main.table_info("citations")
+2025-09-03 14:31:06,747: INFO: [raw sql] ()
+2025-09-03 14:31:06,747: INFO: PRAGMA temp.table_info("citations")
+2025-09-03 14:31:06,747: INFO: [raw sql] ()
+2025-09-03 14:31:06,747: INFO: PRAGMA main.table_info("requisites")
+2025-09-03 14:31:06,747: INFO: [raw sql] ()
+2025-09-03 14:31:06,747: INFO: PRAGMA temp.table_info("requisites")
+2025-09-03 14:31:06,747: INFO: [raw sql] ()
+2025-09-03 14:31:06,747: INFO: PRAGMA main.table_info("contracts")
+2025-09-03 14:31:06,747: INFO: [raw sql] ()
+2025-09-03 14:31:06,747: INFO: PRAGMA temp.table_info("contracts")
+2025-09-03 14:31:06,747: INFO: [raw sql] ()
+2025-09-03 14:31:06,747: INFO: PRAGMA main.table_info("obligations")
+2025-09-03 14:31:06,747: INFO: [raw sql] ()
+2025-09-03 14:31:06,748: INFO: PRAGMA temp.table_info("obligations")
+2025-09-03 14:31:06,748: INFO: [raw sql] ()
+2025-09-03 14:31:06,748: INFO: PRAGMA main.table_info("reminders")
+2025-09-03 14:31:06,748: INFO: [raw sql] ()
+2025-09-03 14:31:06,748: INFO: PRAGMA temp.table_info("reminders")
+2025-09-03 14:31:06,748: INFO: [raw sql] ()
+2025-09-03 14:31:06,748: INFO: 
+CREATE TABLE documents (
+	id INTEGER NOT NULL, 
+	filename VARCHAR NOT NULL, 
+	upload_date DATETIME, 
+	file_path VARCHAR, 
+	PRIMARY KEY (id)
+)
+
+
+2025-09-03 14:31:06,748: INFO: [no key 0.00004s] ()
+2025-09-03 14:31:06,749: INFO: CREATE INDEX ix_documents_id ON documents (id)
+2025-09-03 14:31:06,749: INFO: [no key 0.00012s] ()
+2025-09-03 14:31:06,749: INFO: 
+CREATE TABLE citations (
+	id INTEGER NOT NULL, 
+	document_id INTEGER NOT NULL, 
+	text VARCHAR NOT NULL, 
+	page INTEGER, 
+	bbox JSON, 
+	paragraph_index INTEGER, 
+	run_index INTEGER, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(document_id) REFERENCES documents (id)
+)
+
+
+2025-09-03 14:31:06,749: INFO: [no key 0.00005s] ()
+2025-09-03 14:31:06,750: INFO: CREATE INDEX ix_citations_id ON citations (id)
+2025-09-03 14:31:06,750: INFO: [no key 0.00003s] ()
+2025-09-03 14:31:06,750: INFO: 
+CREATE TABLE contracts (
+	id INTEGER NOT NULL, 
+	document_id INTEGER NOT NULL, 
+	citation_data JSON, 
+	parsed_amount FLOAT, 
+	parsed_currency VARCHAR, 
+	parsed_penalty_present BOOLEAN, 
+	PRIMARY KEY (id), 
+	UNIQUE (document_id), 
+	FOREIGN KEY(document_id) REFERENCES documents (id)
+)
+
+
+2025-09-03 14:31:06,750: INFO: [no key 0.00004s] ()
+2025-09-03 14:31:06,750: INFO: CREATE INDEX ix_contracts_id ON contracts (id)
+2025-09-03 14:31:06,751: INFO: [no key 0.00004s] ()
+2025-09-03 14:31:06,751: INFO: 
+CREATE TABLE contract_citation_links (
+	contract_id INTEGER NOT NULL, 
+	citation_id INTEGER NOT NULL, 
+	field_name VARCHAR(50) NOT NULL, 
+	PRIMARY KEY (contract_id, citation_id), 
+	FOREIGN KEY(contract_id) REFERENCES contracts (id), 
+	FOREIGN KEY(citation_id) REFERENCES citations (id)
+)
+
+
+2025-09-03 14:31:06,751: INFO: [no key 0.00007s] ()
+2025-09-03 14:31:06,752: INFO: 
+CREATE TABLE requisites (
+	id INTEGER NOT NULL, 
+	contract_id INTEGER NOT NULL, 
+	inn_id INTEGER, 
+	kpp_id INTEGER, 
+	ogrn_id INTEGER, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(contract_id) REFERENCES contracts (id), 
+	FOREIGN KEY(inn_id) REFERENCES citations (id), 
+	FOREIGN KEY(kpp_id) REFERENCES citations (id), 
+	FOREIGN KEY(ogrn_id) REFERENCES citations (id)
+)
+
+
+2025-09-03 14:31:06,752: INFO: [no key 0.00030s] ()
+2025-09-03 14:31:06,753: INFO: CREATE INDEX ix_requisites_id ON requisites (id)
+2025-09-03 14:31:06,753: INFO: [no key 0.00010s] ()
+2025-09-03 14:31:06,754: INFO: 
+CREATE TABLE obligations (
+	id INTEGER NOT NULL, 
+	contract_id INTEGER NOT NULL, 
+	description VARCHAR NOT NULL, 
+	due_date DATETIME, 
+	status VARCHAR, 
+	citation_id INTEGER, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(contract_id) REFERENCES contracts (id), 
+	FOREIGN KEY(citation_id) REFERENCES citations (id)
+)
+
+
+2025-09-03 14:31:06,754: INFO: [no key 0.00006s] ()
+2025-09-03 14:31:06,755: INFO: CREATE INDEX ix_obligations_id ON obligations (id)
+2025-09-03 14:31:06,755: INFO: [no key 0.00008s] ()
+2025-09-03 14:31:06,756: INFO: 
+CREATE TABLE reminders (
+	id INTEGER NOT NULL, 
+	obligation_id INTEGER NOT NULL, 
+	remind_date DATETIME NOT NULL, 
+	channel VARCHAR, 
+	sent BOOLEAN, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(obligation_id) REFERENCES obligations (id)
+)
+
+
+2025-09-03 14:31:06,756: INFO: [no key 0.00006s] ()
+2025-09-03 14:31:06,756: INFO: CREATE INDEX ix_reminders_id ON reminders (id)
+2025-09-03 14:31:06,756: INFO: [no key 0.00005s] ()
+2025-09-03 14:31:06,756: INFO: COMMIT
+2025-09-03 14:38:17,026: INFO: BEGIN (implicit)
+2025-09-03 14:38:17,026: INFO: PRAGMA main.table_info("contract_citation_links")
+2025-09-03 14:38:17,026: INFO: [raw sql] ()
+2025-09-03 14:38:17,026: INFO: PRAGMA main.table_info("documents")
+2025-09-03 14:38:17,027: INFO: [raw sql] ()
+2025-09-03 14:38:17,027: INFO: PRAGMA main.table_info("citations")
+2025-09-03 14:38:17,027: INFO: [raw sql] ()
+2025-09-03 14:38:17,027: INFO: PRAGMA main.table_info("requisites")
+2025-09-03 14:38:17,027: INFO: [raw sql] ()
+2025-09-03 14:38:17,027: INFO: PRAGMA main.table_info("contracts")
+2025-09-03 14:38:17,027: INFO: [raw sql] ()
+2025-09-03 14:38:17,027: INFO: PRAGMA main.table_info("obligations")
+2025-09-03 14:38:17,027: INFO: [raw sql] ()
+2025-09-03 14:38:17,027: INFO: PRAGMA main.table_info("reminders")
+2025-09-03 14:38:17,027: INFO: [raw sql] ()
+2025-09-03 14:38:17,027: INFO: COMMIT
+2025-09-03 14:38:18,520: INFO: BEGIN (implicit)
+2025-09-03 14:38:18,521: INFO: PRAGMA main.table_info("contract_citation_links")
+2025-09-03 14:38:18,521: INFO: [raw sql] ()
+2025-09-03 14:38:18,521: INFO: PRAGMA main.table_info("documents")
+2025-09-03 14:38:18,521: INFO: [raw sql] ()
+2025-09-03 14:38:18,521: INFO: PRAGMA main.table_info("citations")
+2025-09-03 14:38:18,521: INFO: [raw sql] ()
+2025-09-03 14:38:18,521: INFO: PRAGMA main.table_info("requisites")
+2025-09-03 14:38:18,521: INFO: [raw sql] ()
+2025-09-03 14:38:18,521: INFO: PRAGMA main.table_info("contracts")
+2025-09-03 14:38:18,521: INFO: [raw sql] ()
+2025-09-03 14:38:18,521: INFO: PRAGMA main.table_info("obligations")
+2025-09-03 14:38:18,521: INFO: [raw sql] ()
+2025-09-03 14:38:18,521: INFO: PRAGMA main.table_info("reminders")
+2025-09-03 14:38:18,521: INFO: [raw sql] ()
+2025-09-03 14:38:18,522: INFO: COMMIT
+2025-09-03 14:38:22,244: INFO: BEGIN (implicit)
+2025-09-03 14:38:22,244: INFO: PRAGMA main.table_info("contract_citation_links")
+2025-09-03 14:38:22,244: INFO: [raw sql] ()
+2025-09-03 14:38:22,244: INFO: PRAGMA main.table_info("documents")
+2025-09-03 14:38:22,244: INFO: [raw sql] ()
+2025-09-03 14:38:22,244: INFO: PRAGMA main.table_info("citations")
+2025-09-03 14:38:22,244: INFO: [raw sql] ()
+2025-09-03 14:38:22,244: INFO: PRAGMA main.table_info("requisites")
+2025-09-03 14:38:22,244: INFO: [raw sql] ()
+2025-09-03 14:38:22,245: INFO: PRAGMA main.table_info("contracts")
+2025-09-03 14:38:22,245: INFO: [raw sql] ()
+2025-09-03 14:38:22,245: INFO: PRAGMA main.table_info("obligations")
+2025-09-03 14:38:22,245: INFO: [raw sql] ()
+2025-09-03 14:38:22,245: INFO: PRAGMA main.table_info("reminders")
+2025-09-03 14:38:22,245: INFO: [raw sql] ()
+2025-09-03 14:38:22,245: INFO: COMMIT
+2025-09-03 14:38:37,732: DEBUG: Calling on_part_begin with no data
+2025-09-03 14:38:37,733: DEBUG: Calling on_header_field with data[42:61]
+2025-09-03 14:38:37,733: DEBUG: Calling on_header_value with data[63:139]
+2025-09-03 14:38:37,733: DEBUG: Calling on_header_end with no data
+2025-09-03 14:38:37,733: DEBUG: Calling on_header_field with data[141:153]
+2025-09-03 14:38:37,733: DEBUG: Calling on_header_value with data[155:226]
+2025-09-03 14:38:37,734: DEBUG: Calling on_header_end with no data
+2025-09-03 14:38:37,734: DEBUG: Calling on_headers_finished with no data
+2025-09-03 14:38:37,734: DEBUG: Calling on_part_data with data[230:173116]
+2025-09-03 14:38:37,734: DEBUG: Calling on_part_end with no data
+2025-09-03 14:38:37,734: DEBUG: Calling on_end with no data
+2025-09-03 14:38:37,756: INFO: BEGIN (implicit)
+2025-09-03 14:38:37,758: INFO: SELECT documents.id AS documents_id, documents.filename AS documents_filename, documents.upload_date AS documents_upload_date, documents.file_path AS documents_file_path 
+FROM documents 
+WHERE documents.filename = ?
+ LIMIT ? OFFSET ?
+2025-09-03 14:38:37,758: INFO: [generated in 0.00019s] ('Договор Маросейка.docx', 1, 0)
+2025-09-03 14:38:37,760: INFO: INSERT INTO documents (filename, upload_date, file_path) VALUES (?, ?, ?)
+2025-09-03 14:38:37,760: INFO: [generated in 0.00012s] ('Договор Маросейка.docx', '2025-09-03 14:38:22.005771', '/Users/ddrxg/Code/ParserPDFforRemind/uploads/Договор Маросейка.docx')
+2025-09-03 14:38:37,761: INFO: COMMIT
+2025-09-03 14:38:37,762: INFO: BEGIN (implicit)
+2025-09-03 14:38:37,762: INFO: SELECT documents.id, documents.filename, documents.upload_date, documents.file_path 
+FROM documents 
+WHERE documents.id = ?
+2025-09-03 14:38:37,763: INFO: [generated in 0.00014s] (1,)
+2025-09-03 14:38:37,768: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-03 14:38:39,190: INFO: ROLLBACK
+2025-09-03 14:39:33,391: DEBUG: 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2025-09-03 14:39:33,392: DEBUG: 
+def xmap(task, it):
+    return 1
+
+2025-09-03 14:39:33,392: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-03 14:39:33,392: DEBUG: 
+def backend_cleanup():
+    return 1
+
+2025-09-03 14:39:33,392: DEBUG: 
+def chain(*args, **kwargs):
+    return 1
+
+2025-09-03 14:39:33,392: DEBUG: 
+def xstarmap(task, it):
+    return 1
+
+2025-09-03 14:39:33,392: DEBUG: 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2025-09-03 14:39:33,392: DEBUG: 
+def file_extract(document):
+    return 1
+
+2025-09-03 14:39:33,392: DEBUG: 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2025-09-03 14:39:33,392: DEBUG: 
+def chunks(task, it, n):
+    return 1
+
+2025-09-03 14:39:33,393: DEBUG: 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2025-09-03 14:39:33,393: DEBUG: 
+def async_set_redis(key, value, expire=0):
+    return 1
+
+2025-09-03 14:40:26,695: INFO: BEGIN (implicit)
+2025-09-03 14:40:26,696: INFO: PRAGMA main.table_info("contract_citation_links")
+2025-09-03 14:40:26,696: INFO: [raw sql] ()
+2025-09-03 14:40:26,696: INFO: PRAGMA main.table_info("documents")
+2025-09-03 14:40:26,696: INFO: [raw sql] ()
+2025-09-03 14:40:26,696: INFO: PRAGMA main.table_info("citations")
+2025-09-03 14:40:26,696: INFO: [raw sql] ()
+2025-09-03 14:40:26,696: INFO: PRAGMA main.table_info("requisites")
+2025-09-03 14:40:26,696: INFO: [raw sql] ()
+2025-09-03 14:40:26,696: INFO: PRAGMA main.table_info("contracts")
+2025-09-03 14:40:26,696: INFO: [raw sql] ()
+2025-09-03 14:40:26,696: INFO: PRAGMA main.table_info("obligations")
+2025-09-03 14:40:26,696: INFO: [raw sql] ()
+2025-09-03 14:40:26,696: INFO: PRAGMA main.table_info("reminders")
+2025-09-03 14:40:26,696: INFO: [raw sql] ()
+2025-09-03 14:40:26,696: INFO: COMMIT
+2025-09-03 14:40:29,809: INFO: BEGIN (implicit)
+2025-09-03 14:40:29,809: INFO: PRAGMA main.table_info("contract_citation_links")
+2025-09-03 14:40:29,809: INFO: [raw sql] ()
+2025-09-03 14:40:29,810: INFO: PRAGMA main.table_info("documents")
+2025-09-03 14:40:29,810: INFO: [raw sql] ()
+2025-09-03 14:40:29,810: INFO: PRAGMA main.table_info("citations")
+2025-09-03 14:40:29,810: INFO: [raw sql] ()
+2025-09-03 14:40:29,810: INFO: PRAGMA main.table_info("requisites")
+2025-09-03 14:40:29,810: INFO: [raw sql] ()
+2025-09-03 14:40:29,810: INFO: PRAGMA main.table_info("contracts")
+2025-09-03 14:40:29,810: INFO: [raw sql] ()
+2025-09-03 14:40:29,810: INFO: PRAGMA main.table_info("obligations")
+2025-09-03 14:40:29,810: INFO: [raw sql] ()
+2025-09-03 14:40:29,810: INFO: PRAGMA main.table_info("reminders")
+2025-09-03 14:40:29,810: INFO: [raw sql] ()
+2025-09-03 14:40:29,810: INFO: COMMIT
+2025-09-03 14:40:44,332: DEBUG: 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2025-09-03 14:40:44,332: DEBUG: 
+def xmap(task, it):
+    return 1
+
+2025-09-03 14:40:44,332: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-03 14:40:44,332: DEBUG: 
+def backend_cleanup():
+    return 1
+
+2025-09-03 14:40:44,332: DEBUG: 
+def chain(*args, **kwargs):
+    return 1
+
+2025-09-03 14:40:44,332: DEBUG: 
+def xstarmap(task, it):
+    return 1
+
+2025-09-03 14:40:44,332: DEBUG: 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2025-09-03 14:40:44,332: DEBUG: 
+def file_extract(document):
+    return 1
+
+2025-09-03 14:40:44,332: DEBUG: 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2025-09-03 14:40:44,333: DEBUG: 
+def chunks(task, it, n):
+    return 1
+
+2025-09-03 14:40:44,333: DEBUG: 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2025-09-03 14:40:44,333: DEBUG: 
+def async_set_redis(key, value, expire=0):
+    return 1
+
+2025-09-03 14:40:52,249: DEBUG: 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2025-09-03 14:40:52,249: DEBUG: 
+def xmap(task, it):
+    return 1
+
+2025-09-03 14:40:52,249: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-03 14:40:52,249: DEBUG: 
+def backend_cleanup():
+    return 1
+
+2025-09-03 14:40:52,249: DEBUG: 
+def chain(*args, **kwargs):
+    return 1
+
+2025-09-03 14:40:52,249: DEBUG: 
+def xstarmap(task, it):
+    return 1
+
+2025-09-03 14:40:52,250: DEBUG: 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2025-09-03 14:40:52,250: DEBUG: 
+def file_extract(document):
+    return 1
+
+2025-09-03 14:40:52,250: DEBUG: 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2025-09-03 14:40:52,250: DEBUG: 
+def chunks(task, it, n):
+    return 1
+
+2025-09-03 14:40:52,250: DEBUG: 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2025-09-03 14:40:52,250: DEBUG: 
+def async_set_redis(key, value, expire=0):
+    return 1
+
+2025-09-03 14:41:04,857: INFO: BEGIN (implicit)
+2025-09-03 14:41:04,857: INFO: PRAGMA main.table_info("contract_citation_links")
+2025-09-03 14:41:04,857: INFO: [raw sql] ()
+2025-09-03 14:41:04,857: INFO: PRAGMA temp.table_info("contract_citation_links")
+2025-09-03 14:41:04,857: INFO: [raw sql] ()
+2025-09-03 14:41:04,858: INFO: PRAGMA main.table_info("documents")
+2025-09-03 14:41:04,858: INFO: [raw sql] ()
+2025-09-03 14:41:04,858: INFO: PRAGMA temp.table_info("documents")
+2025-09-03 14:41:04,858: INFO: [raw sql] ()
+2025-09-03 14:41:04,858: INFO: PRAGMA main.table_info("citations")
+2025-09-03 14:41:04,858: INFO: [raw sql] ()
+2025-09-03 14:41:04,858: INFO: PRAGMA temp.table_info("citations")
+2025-09-03 14:41:04,858: INFO: [raw sql] ()
+2025-09-03 14:41:04,858: INFO: PRAGMA main.table_info("requisites")
+2025-09-03 14:41:04,858: INFO: [raw sql] ()
+2025-09-03 14:41:04,858: INFO: PRAGMA temp.table_info("requisites")
+2025-09-03 14:41:04,858: INFO: [raw sql] ()
+2025-09-03 14:41:04,858: INFO: PRAGMA main.table_info("contracts")
+2025-09-03 14:41:04,858: INFO: [raw sql] ()
+2025-09-03 14:41:04,858: INFO: PRAGMA temp.table_info("contracts")
+2025-09-03 14:41:04,858: INFO: [raw sql] ()
+2025-09-03 14:41:04,858: INFO: PRAGMA main.table_info("obligations")
+2025-09-03 14:41:04,858: INFO: [raw sql] ()
+2025-09-03 14:41:04,858: INFO: PRAGMA temp.table_info("obligations")
+2025-09-03 14:41:04,858: INFO: [raw sql] ()
+2025-09-03 14:41:04,858: INFO: PRAGMA main.table_info("reminders")
+2025-09-03 14:41:04,858: INFO: [raw sql] ()
+2025-09-03 14:41:04,858: INFO: PRAGMA temp.table_info("reminders")
+2025-09-03 14:41:04,858: INFO: [raw sql] ()
+2025-09-03 14:41:04,859: INFO: 
+CREATE TABLE documents (
+	id INTEGER NOT NULL, 
+	filename VARCHAR NOT NULL, 
+	upload_date DATETIME, 
+	file_path VARCHAR, 
+	PRIMARY KEY (id)
+)
+
+
+2025-09-03 14:41:04,859: INFO: [no key 0.00003s] ()
+2025-09-03 14:41:04,860: INFO: CREATE INDEX ix_documents_id ON documents (id)
+2025-09-03 14:41:04,860: INFO: [no key 0.00011s] ()
+2025-09-03 14:41:04,860: INFO: 
+CREATE TABLE citations (
+	id INTEGER NOT NULL, 
+	document_id INTEGER NOT NULL, 
+	text VARCHAR NOT NULL, 
+	page INTEGER, 
+	bbox JSON, 
+	paragraph_index INTEGER, 
+	run_index INTEGER, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(document_id) REFERENCES documents (id)
+)
+
+
+2025-09-03 14:41:04,860: INFO: [no key 0.00006s] ()
+2025-09-03 14:41:04,861: INFO: CREATE INDEX ix_citations_id ON citations (id)
+2025-09-03 14:41:04,861: INFO: [no key 0.00005s] ()
+2025-09-03 14:41:04,861: INFO: 
+CREATE TABLE contracts (
+	id INTEGER NOT NULL, 
+	document_id INTEGER NOT NULL, 
+	citation_data JSON, 
+	parsed_amount FLOAT, 
+	parsed_currency VARCHAR, 
+	parsed_penalty_present BOOLEAN, 
+	PRIMARY KEY (id), 
+	UNIQUE (document_id), 
+	FOREIGN KEY(document_id) REFERENCES documents (id)
+)
+
+
+2025-09-03 14:41:04,861: INFO: [no key 0.00005s] ()
+2025-09-03 14:41:04,862: INFO: CREATE INDEX ix_contracts_id ON contracts (id)
+2025-09-03 14:41:04,862: INFO: [no key 0.00004s] ()
+2025-09-03 14:41:04,862: INFO: 
+CREATE TABLE contract_citation_links (
+	contract_id INTEGER NOT NULL, 
+	citation_id INTEGER NOT NULL, 
+	field_name VARCHAR(50) NOT NULL, 
+	PRIMARY KEY (contract_id, citation_id), 
+	FOREIGN KEY(contract_id) REFERENCES contracts (id), 
+	FOREIGN KEY(citation_id) REFERENCES citations (id)
+)
+
+
+2025-09-03 14:41:04,862: INFO: [no key 0.00004s] ()
+2025-09-03 14:41:04,863: INFO: 
+CREATE TABLE requisites (
+	id INTEGER NOT NULL, 
+	contract_id INTEGER NOT NULL, 
+	inn_id INTEGER, 
+	kpp_id INTEGER, 
+	ogrn_id INTEGER, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(contract_id) REFERENCES contracts (id), 
+	FOREIGN KEY(inn_id) REFERENCES citations (id), 
+	FOREIGN KEY(kpp_id) REFERENCES citations (id), 
+	FOREIGN KEY(ogrn_id) REFERENCES citations (id)
+)
+
+
+2025-09-03 14:41:04,863: INFO: [no key 0.00004s] ()
+2025-09-03 14:41:04,863: INFO: CREATE INDEX ix_requisites_id ON requisites (id)
+2025-09-03 14:41:04,863: INFO: [no key 0.00003s] ()
+2025-09-03 14:41:04,864: INFO: 
+CREATE TABLE obligations (
+	id INTEGER NOT NULL, 
+	contract_id INTEGER NOT NULL, 
+	description VARCHAR NOT NULL, 
+	due_date DATETIME, 
+	status VARCHAR, 
+	citation_id INTEGER, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(contract_id) REFERENCES contracts (id), 
+	FOREIGN KEY(citation_id) REFERENCES citations (id)
+)
+
+
+2025-09-03 14:41:04,864: INFO: [no key 0.00003s] ()
+2025-09-03 14:41:04,864: INFO: CREATE INDEX ix_obligations_id ON obligations (id)
+2025-09-03 14:41:04,864: INFO: [no key 0.00003s] ()
+2025-09-03 14:41:04,864: INFO: 
+CREATE TABLE reminders (
+	id INTEGER NOT NULL, 
+	obligation_id INTEGER NOT NULL, 
+	remind_date DATETIME NOT NULL, 
+	channel VARCHAR, 
+	sent BOOLEAN, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(obligation_id) REFERENCES obligations (id)
+)
+
+
+2025-09-03 14:41:04,864: INFO: [no key 0.00003s] ()
+2025-09-03 14:41:04,865: INFO: CREATE INDEX ix_reminders_id ON reminders (id)
+2025-09-03 14:41:04,865: INFO: [no key 0.00004s] ()
+2025-09-03 14:41:04,865: INFO: COMMIT
+2025-09-03 14:41:11,222: DEBUG: Calling on_part_begin with no data
+2025-09-03 14:41:11,223: DEBUG: Calling on_header_field with data[42:61]
+2025-09-03 14:41:11,223: DEBUG: Calling on_header_value with data[63:139]
+2025-09-03 14:41:11,223: DEBUG: Calling on_header_end with no data
+2025-09-03 14:41:11,223: DEBUG: Calling on_header_field with data[141:153]
+2025-09-03 14:41:11,223: DEBUG: Calling on_header_value with data[155:226]
+2025-09-03 14:41:11,224: DEBUG: Calling on_header_end with no data
+2025-09-03 14:41:11,224: DEBUG: Calling on_headers_finished with no data
+2025-09-03 14:41:11,224: DEBUG: Calling on_part_data with data[230:173116]
+2025-09-03 14:41:11,224: DEBUG: Calling on_part_end with no data
+2025-09-03 14:41:11,224: DEBUG: Calling on_end with no data
+2025-09-03 14:41:11,244: INFO: BEGIN (implicit)
+2025-09-03 14:41:11,246: INFO: SELECT documents.id AS documents_id, documents.filename AS documents_filename, documents.upload_date AS documents_upload_date, documents.file_path AS documents_file_path 
+FROM documents 
+WHERE documents.filename = ?
+ LIMIT ? OFFSET ?
+2025-09-03 14:41:11,247: INFO: [generated in 0.00021s] ('Договор Маросейка.docx', 1, 0)
+2025-09-03 14:41:11,248: INFO: INSERT INTO documents (filename, upload_date, file_path) VALUES (?, ?, ?)
+2025-09-03 14:41:11,248: INFO: [generated in 0.00014s] ('Договор Маросейка.docx', '2025-09-03 14:41:04.611676', '/Users/ddrxg/Code/ParserPDFforRemind/uploads/Договор Маросейка.docx')
+2025-09-03 14:41:11,249: INFO: COMMIT
+2025-09-03 14:41:11,250: INFO: BEGIN (implicit)
+2025-09-03 14:41:11,250: INFO: SELECT documents.id, documents.filename, documents.upload_date, documents.file_path 
+FROM documents 
+WHERE documents.id = ?
+2025-09-03 14:41:11,250: INFO: [generated in 0.00010s] (1,)
+2025-09-03 14:41:11,258: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-03 14:41:12,480: INFO: ROLLBACK
+2025-09-03 14:43:51,503: DEBUG: 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2025-09-03 14:43:51,504: DEBUG: 
+def xmap(task, it):
+    return 1
+
+2025-09-03 14:43:51,504: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-03 14:43:51,504: DEBUG: 
+def backend_cleanup():
+    return 1
+
+2025-09-03 14:43:51,504: DEBUG: 
+def chain(*args, **kwargs):
+    return 1
+
+2025-09-03 14:43:51,504: DEBUG: 
+def xstarmap(task, it):
+    return 1
+
+2025-09-03 14:43:51,504: DEBUG: 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2025-09-03 14:43:51,504: DEBUG: 
+def file_extract(document):
+    return 1
+
+2025-09-03 14:43:51,505: DEBUG: 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2025-09-03 14:43:51,505: DEBUG: 
+def chunks(task, it, n):
+    return 1
+
+2025-09-03 14:43:51,505: DEBUG: 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2025-09-03 14:43:51,505: DEBUG: 
+def async_set_redis(key, value, expire=0):
+    return 1
+
+2025-09-03 14:43:55,182: INFO: BEGIN (implicit)
+2025-09-03 14:43:55,182: INFO: PRAGMA main.table_info("contract_citation_links")
+2025-09-03 14:43:55,182: INFO: [raw sql] ()
+2025-09-03 14:43:55,182: INFO: PRAGMA temp.table_info("contract_citation_links")
+2025-09-03 14:43:55,182: INFO: [raw sql] ()
+2025-09-03 14:43:55,183: INFO: PRAGMA main.table_info("documents")
+2025-09-03 14:43:55,183: INFO: [raw sql] ()
+2025-09-03 14:43:55,183: INFO: PRAGMA temp.table_info("documents")
+2025-09-03 14:43:55,183: INFO: [raw sql] ()
+2025-09-03 14:43:55,183: INFO: PRAGMA main.table_info("citations")
+2025-09-03 14:43:55,183: INFO: [raw sql] ()
+2025-09-03 14:43:55,183: INFO: PRAGMA temp.table_info("citations")
+2025-09-03 14:43:55,183: INFO: [raw sql] ()
+2025-09-03 14:43:55,183: INFO: PRAGMA main.table_info("requisites")
+2025-09-03 14:43:55,183: INFO: [raw sql] ()
+2025-09-03 14:43:55,183: INFO: PRAGMA temp.table_info("requisites")
+2025-09-03 14:43:55,183: INFO: [raw sql] ()
+2025-09-03 14:43:55,183: INFO: PRAGMA main.table_info("contracts")
+2025-09-03 14:43:55,183: INFO: [raw sql] ()
+2025-09-03 14:43:55,183: INFO: PRAGMA temp.table_info("contracts")
+2025-09-03 14:43:55,183: INFO: [raw sql] ()
+2025-09-03 14:43:55,183: INFO: PRAGMA main.table_info("obligations")
+2025-09-03 14:43:55,183: INFO: [raw sql] ()
+2025-09-03 14:43:55,183: INFO: PRAGMA temp.table_info("obligations")
+2025-09-03 14:43:55,183: INFO: [raw sql] ()
+2025-09-03 14:43:55,183: INFO: PRAGMA main.table_info("reminders")
+2025-09-03 14:43:55,183: INFO: [raw sql] ()
+2025-09-03 14:43:55,183: INFO: PRAGMA temp.table_info("reminders")
+2025-09-03 14:43:55,183: INFO: [raw sql] ()
+2025-09-03 14:43:55,184: INFO: 
+CREATE TABLE documents (
+	id INTEGER NOT NULL, 
+	filename VARCHAR NOT NULL, 
+	upload_date DATETIME, 
+	file_path VARCHAR, 
+	PRIMARY KEY (id)
+)
+
+
+2025-09-03 14:43:55,184: INFO: [no key 0.00004s] ()
+2025-09-03 14:43:55,184: INFO: CREATE INDEX ix_documents_id ON documents (id)
+2025-09-03 14:43:55,184: INFO: [no key 0.00010s] ()
+2025-09-03 14:43:55,185: INFO: 
+CREATE TABLE citations (
+	id INTEGER NOT NULL, 
+	document_id INTEGER NOT NULL, 
+	text VARCHAR NOT NULL, 
+	page INTEGER, 
+	bbox JSON, 
+	paragraph_index INTEGER, 
+	run_index INTEGER, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(document_id) REFERENCES documents (id)
+)
+
+
+2025-09-03 14:43:55,185: INFO: [no key 0.00006s] ()
+2025-09-03 14:43:55,185: INFO: CREATE INDEX ix_citations_id ON citations (id)
+2025-09-03 14:43:55,185: INFO: [no key 0.00005s] ()
+2025-09-03 14:43:55,186: INFO: 
+CREATE TABLE contracts (
+	id INTEGER NOT NULL, 
+	document_id INTEGER NOT NULL, 
+	citation_data JSON, 
+	parsed_amount FLOAT, 
+	parsed_currency VARCHAR, 
+	parsed_penalty_present BOOLEAN, 
+	PRIMARY KEY (id), 
+	UNIQUE (document_id), 
+	FOREIGN KEY(document_id) REFERENCES documents (id)
+)
+
+
+2025-09-03 14:43:55,186: INFO: [no key 0.00005s] ()
+2025-09-03 14:43:55,186: INFO: CREATE INDEX ix_contracts_id ON contracts (id)
+2025-09-03 14:43:55,186: INFO: [no key 0.00004s] ()
+2025-09-03 14:43:55,187: INFO: 
+CREATE TABLE contract_citation_links (
+	contract_id INTEGER NOT NULL, 
+	citation_id INTEGER NOT NULL, 
+	field_name VARCHAR(50) NOT NULL, 
+	PRIMARY KEY (contract_id, citation_id), 
+	FOREIGN KEY(contract_id) REFERENCES contracts (id), 
+	FOREIGN KEY(citation_id) REFERENCES citations (id)
+)
+
+
+2025-09-03 14:43:55,187: INFO: [no key 0.00004s] ()
+2025-09-03 14:43:55,187: INFO: 
+CREATE TABLE requisites (
+	id INTEGER NOT NULL, 
+	contract_id INTEGER NOT NULL, 
+	inn_id INTEGER, 
+	kpp_id INTEGER, 
+	ogrn_id INTEGER, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(contract_id) REFERENCES contracts (id), 
+	FOREIGN KEY(inn_id) REFERENCES citations (id), 
+	FOREIGN KEY(kpp_id) REFERENCES citations (id), 
+	FOREIGN KEY(ogrn_id) REFERENCES citations (id)
+)
+
+
+2025-09-03 14:43:55,187: INFO: [no key 0.00005s] ()
+2025-09-03 14:43:55,188: INFO: CREATE INDEX ix_requisites_id ON requisites (id)
+2025-09-03 14:43:55,188: INFO: [no key 0.00005s] ()
+2025-09-03 14:43:55,188: INFO: 
+CREATE TABLE obligations (
+	id INTEGER NOT NULL, 
+	contract_id INTEGER NOT NULL, 
+	description VARCHAR NOT NULL, 
+	due_date DATETIME, 
+	status VARCHAR, 
+	citation_id INTEGER, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(contract_id) REFERENCES contracts (id), 
+	FOREIGN KEY(citation_id) REFERENCES citations (id)
+)
+
+
+2025-09-03 14:43:55,188: INFO: [no key 0.00004s] ()
+2025-09-03 14:43:55,189: INFO: CREATE INDEX ix_obligations_id ON obligations (id)
+2025-09-03 14:43:55,189: INFO: [no key 0.00006s] ()
+2025-09-03 14:43:55,189: INFO: 
+CREATE TABLE reminders (
+	id INTEGER NOT NULL, 
+	obligation_id INTEGER NOT NULL, 
+	remind_date DATETIME NOT NULL, 
+	channel VARCHAR, 
+	sent BOOLEAN, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(obligation_id) REFERENCES obligations (id)
+)
+
+
+2025-09-03 14:43:55,189: INFO: [no key 0.00004s] ()
+2025-09-03 14:43:55,190: INFO: CREATE INDEX ix_reminders_id ON reminders (id)
+2025-09-03 14:43:55,190: INFO: [no key 0.00003s] ()
+2025-09-03 14:43:55,190: INFO: COMMIT
+2025-09-03 14:44:08,497: DEBUG: Calling on_part_begin with no data
+2025-09-03 14:44:08,498: DEBUG: Calling on_header_field with data[42:61]
+2025-09-03 14:44:08,499: DEBUG: Calling on_header_value with data[63:139]
+2025-09-03 14:44:08,499: DEBUG: Calling on_header_end with no data
+2025-09-03 14:44:08,499: DEBUG: Calling on_header_field with data[141:153]
+2025-09-03 14:44:08,499: DEBUG: Calling on_header_value with data[155:226]
+2025-09-03 14:44:08,499: DEBUG: Calling on_header_end with no data
+2025-09-03 14:44:08,499: DEBUG: Calling on_headers_finished with no data
+2025-09-03 14:44:08,499: DEBUG: Calling on_part_data with data[230:173116]
+2025-09-03 14:44:08,499: DEBUG: Calling on_part_end with no data
+2025-09-03 14:44:08,499: DEBUG: Calling on_end with no data
+2025-09-03 14:44:08,522: INFO: BEGIN (implicit)
+2025-09-03 14:44:08,524: INFO: SELECT documents.id AS documents_id, documents.filename AS documents_filename, documents.upload_date AS documents_upload_date, documents.file_path AS documents_file_path 
+FROM documents 
+WHERE documents.filename = ?
+ LIMIT ? OFFSET ?
+2025-09-03 14:44:08,524: INFO: [generated in 0.00016s] ('Договор Маросейка.docx', 1, 0)
+2025-09-03 14:44:08,525: INFO: INSERT INTO documents (filename, upload_date, file_path) VALUES (?, ?, ?)
+2025-09-03 14:44:08,525: INFO: [generated in 0.00017s] ('Договор Маросейка.docx', '2025-09-03 14:43:54.940483', '/Users/ddrxg/Code/ParserPDFforRemind/uploads/Договор Маросейка.docx')
+2025-09-03 14:44:08,526: INFO: COMMIT
+2025-09-03 14:44:08,527: INFO: BEGIN (implicit)
+2025-09-03 14:44:08,527: INFO: SELECT documents.id, documents.filename, documents.upload_date, documents.file_path 
+FROM documents 
+WHERE documents.id = ?
+2025-09-03 14:44:08,528: INFO: [generated in 0.00008s] (1,)
+2025-09-03 14:44:08,532: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-03 14:44:09,774: INFO: ROLLBACK

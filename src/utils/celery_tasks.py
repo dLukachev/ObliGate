@@ -8,6 +8,8 @@ from src.utils.redis_client import get_redis_session
 from src.data.db.base import get_db_session
 from src.repositories.contract_repo import ContractRepository
 
+from src.docs_checker.check_file import get_and_send_to_llm
+
 # Настройка логирования
 logging.basicConfig(level=logging.INFO, format='%(asctime)s: %(levelname)s/%(processName)s: %(message)s')
 logger = logging.getLogger(__name__)
@@ -17,6 +19,11 @@ async def async_set_redis(key: str, value: str, expire: int = 10):
     async with get_redis_session() as redis:
         await redis.set(key, value, ex=expire)
         return await redis.get(key)
+    
+@app.task
+def file_extract(document: int):
+    result = get_and_send_to_llm(document)
+    return result
 
 @app.task
 def process_document(document_id: int, file_path: str):
@@ -145,6 +152,10 @@ def process_document(document_id: int, file_path: str):
                         paragraph_index += 1
 
             logging.info(f"Извлечен текст из DOCX длиной: {len(full_text)} символов")
+
+            # ставим таску на обработку документа
+            file_extract.delay(document_id) # type: ignore
+
             return full_text
 
         except Exception as e:
