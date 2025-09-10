@@ -12,3 +12,8 @@ PyMuPDF
 pytesseract
 PaddleOCR
 python-docx
+transformers
+datasets
+seqeval
+sentencepiece
+torch

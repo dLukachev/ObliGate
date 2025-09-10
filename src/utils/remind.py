@@ -5,7 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 sys.path.append(str(BASE_DIR))
 
 from datetime import datetime
-from src.utils.celery_tasks import remind
+# from src.utils.celery_tasks import remind
 
 def set_reminder(message, remind_at: datetime):
     remind.apply_async( # type: ignore

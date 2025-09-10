@@ -9,7 +9,7 @@ from src.utils.redis_client import get_redis_session
 from src.data.db.base import get_db_session
 from src.repositories.contract_repo import ContractRepository
 
-from src.docs_checker.check_file import get_and_send_to_llm
+from src.docs_checker.check_file import get_and_send_processing
 from src.utils.bot_for_remind import send_remind_in_telegram
 
 # Настройка логирования
@@ -22,16 +22,16 @@ async def async_set_redis(key: str, value: str, expire: int = 10):
         await redis.set(key, value, ex=expire)
         return await redis.get(key)
 
-@app.task
-def remind(message):
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    loop.run_until_complete(send_remind_in_telegram(message))
-    loop.close()
+# @app.task
+# def remind(message):
+#     loop = asyncio.new_event_loop()
+#     asyncio.set_event_loop(loop)
+#     loop.run_until_complete(send_remind_in_telegram(message))
+#     loop.close()
 
 @app.task
 def file_extract(document: int):
-    result = get_and_send_to_llm(document)
+    result = get_and_send_processing(document)
     return result
 
 @app.task

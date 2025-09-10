@@ -2286,3 +2286,1604 @@ def process_document(document_id, file_path):
 def remind(message, time):
     return 1
 
+2025-09-08 16:44:57,394: INFO: BEGIN (implicit)
+2025-09-08 16:44:57,394: INFO: PRAGMA main.table_info("contract_citation_links")
+2025-09-08 16:44:57,394: INFO: [raw sql] ()
+2025-09-08 16:44:57,395: INFO: PRAGMA temp.table_info("contract_citation_links")
+2025-09-08 16:44:57,395: INFO: [raw sql] ()
+2025-09-08 16:44:57,395: INFO: PRAGMA main.table_info("documents")
+2025-09-08 16:44:57,395: INFO: [raw sql] ()
+2025-09-08 16:44:57,395: INFO: PRAGMA temp.table_info("documents")
+2025-09-08 16:44:57,395: INFO: [raw sql] ()
+2025-09-08 16:44:57,395: INFO: PRAGMA main.table_info("citations")
+2025-09-08 16:44:57,395: INFO: [raw sql] ()
+2025-09-08 16:44:57,395: INFO: PRAGMA temp.table_info("citations")
+2025-09-08 16:44:57,395: INFO: [raw sql] ()
+2025-09-08 16:44:57,395: INFO: PRAGMA main.table_info("requisites")
+2025-09-08 16:44:57,395: INFO: [raw sql] ()
+2025-09-08 16:44:57,395: INFO: PRAGMA temp.table_info("requisites")
+2025-09-08 16:44:57,395: INFO: [raw sql] ()
+2025-09-08 16:44:57,395: INFO: PRAGMA main.table_info("contracts")
+2025-09-08 16:44:57,395: INFO: [raw sql] ()
+2025-09-08 16:44:57,395: INFO: PRAGMA temp.table_info("contracts")
+2025-09-08 16:44:57,395: INFO: [raw sql] ()
+2025-09-08 16:44:57,395: INFO: PRAGMA main.table_info("obligations")
+2025-09-08 16:44:57,396: INFO: [raw sql] ()
+2025-09-08 16:44:57,396: INFO: PRAGMA temp.table_info("obligations")
+2025-09-08 16:44:57,396: INFO: [raw sql] ()
+2025-09-08 16:44:57,396: INFO: PRAGMA main.table_info("reminders")
+2025-09-08 16:44:57,396: INFO: [raw sql] ()
+2025-09-08 16:44:57,396: INFO: PRAGMA temp.table_info("reminders")
+2025-09-08 16:44:57,396: INFO: [raw sql] ()
+2025-09-08 16:44:57,396: INFO: 
+CREATE TABLE documents (
+	id INTEGER NOT NULL, 
+	filename VARCHAR NOT NULL, 
+	upload_date DATETIME, 
+	file_path VARCHAR, 
+	PRIMARY KEY (id)
+)
+
+
+2025-09-08 16:44:57,396: INFO: [no key 0.00004s] ()
+2025-09-08 16:44:57,397: INFO: CREATE INDEX ix_documents_id ON documents (id)
+2025-09-08 16:44:57,397: INFO: [no key 0.00004s] ()
+2025-09-08 16:44:57,397: INFO: 
+CREATE TABLE citations (
+	id INTEGER NOT NULL, 
+	document_id INTEGER NOT NULL, 
+	text VARCHAR NOT NULL, 
+	page INTEGER, 
+	bbox JSON, 
+	paragraph_index INTEGER, 
+	run_index INTEGER, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(document_id) REFERENCES documents (id)
+)
+
+
+2025-09-08 16:44:57,397: INFO: [no key 0.00003s] ()
+2025-09-08 16:44:57,398: INFO: CREATE INDEX ix_citations_id ON citations (id)
+2025-09-08 16:44:57,398: INFO: [no key 0.00003s] ()
+2025-09-08 16:44:57,398: INFO: 
+CREATE TABLE contracts (
+	id INTEGER NOT NULL, 
+	document_id INTEGER NOT NULL, 
+	citation_data JSON, 
+	parsed_amount FLOAT, 
+	parsed_currency VARCHAR, 
+	parsed_penalty_present BOOLEAN, 
+	PRIMARY KEY (id), 
+	UNIQUE (document_id), 
+	FOREIGN KEY(document_id) REFERENCES documents (id)
+)
+
+
+2025-09-08 16:44:57,398: INFO: [no key 0.00003s] ()
+2025-09-08 16:44:57,399: INFO: CREATE INDEX ix_contracts_id ON contracts (id)
+2025-09-08 16:44:57,399: INFO: [no key 0.00011s] ()
+2025-09-08 16:44:57,400: INFO: 
+CREATE TABLE contract_citation_links (
+	contract_id INTEGER NOT NULL, 
+	citation_id INTEGER NOT NULL, 
+	field_name VARCHAR(50) NOT NULL, 
+	PRIMARY KEY (contract_id, citation_id), 
+	FOREIGN KEY(contract_id) REFERENCES contracts (id), 
+	FOREIGN KEY(citation_id) REFERENCES citations (id)
+)
+
+
+2025-09-08 16:44:57,400: INFO: [no key 0.00010s] ()
+2025-09-08 16:44:57,401: INFO: 
+CREATE TABLE requisites (
+	id INTEGER NOT NULL, 
+	contract_id INTEGER NOT NULL, 
+	inn_id INTEGER, 
+	kpp_id INTEGER, 
+	ogrn_id INTEGER, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(contract_id) REFERENCES contracts (id), 
+	FOREIGN KEY(inn_id) REFERENCES citations (id), 
+	FOREIGN KEY(kpp_id) REFERENCES citations (id), 
+	FOREIGN KEY(ogrn_id) REFERENCES citations (id)
+)
+
+
+2025-09-08 16:44:57,401: INFO: [no key 0.00009s] ()
+2025-09-08 16:44:57,401: INFO: CREATE INDEX ix_requisites_id ON requisites (id)
+2025-09-08 16:44:57,401: INFO: [no key 0.00004s] ()
+2025-09-08 16:44:57,402: INFO: 
+CREATE TABLE obligations (
+	id INTEGER NOT NULL, 
+	contract_id INTEGER NOT NULL, 
+	description VARCHAR NOT NULL, 
+	due_date DATETIME, 
+	status VARCHAR, 
+	citation_id INTEGER, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(contract_id) REFERENCES contracts (id), 
+	FOREIGN KEY(citation_id) REFERENCES citations (id)
+)
+
+
+2025-09-08 16:44:57,402: INFO: [no key 0.00004s] ()
+2025-09-08 16:44:57,402: INFO: CREATE INDEX ix_obligations_id ON obligations (id)
+2025-09-08 16:44:57,402: INFO: [no key 0.00003s] ()
+2025-09-08 16:44:57,402: INFO: 
+CREATE TABLE reminders (
+	id INTEGER NOT NULL, 
+	obligation_id INTEGER NOT NULL, 
+	remind_date DATETIME NOT NULL, 
+	channel VARCHAR, 
+	sent BOOLEAN, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(obligation_id) REFERENCES obligations (id)
+)
+
+
+2025-09-08 16:44:57,403: INFO: [no key 0.00004s] ()
+2025-09-08 16:44:57,403: INFO: CREATE INDEX ix_reminders_id ON reminders (id)
+2025-09-08 16:44:57,403: INFO: [no key 0.00005s] ()
+2025-09-08 16:44:57,403: INFO: COMMIT
+2025-09-08 16:45:03,159: INFO: BEGIN (implicit)
+2025-09-08 16:45:03,159: INFO: PRAGMA main.table_info("contract_citation_links")
+2025-09-08 16:45:03,159: INFO: [raw sql] ()
+2025-09-08 16:45:03,160: INFO: PRAGMA main.table_info("documents")
+2025-09-08 16:45:03,160: INFO: [raw sql] ()
+2025-09-08 16:45:03,160: INFO: PRAGMA main.table_info("citations")
+2025-09-08 16:45:03,160: INFO: [raw sql] ()
+2025-09-08 16:45:03,160: INFO: PRAGMA main.table_info("requisites")
+2025-09-08 16:45:03,160: INFO: [raw sql] ()
+2025-09-08 16:45:03,160: INFO: PRAGMA main.table_info("contracts")
+2025-09-08 16:45:03,160: INFO: [raw sql] ()
+2025-09-08 16:45:03,160: INFO: PRAGMA main.table_info("obligations")
+2025-09-08 16:45:03,160: INFO: [raw sql] ()
+2025-09-08 16:45:03,160: INFO: PRAGMA main.table_info("reminders")
+2025-09-08 16:45:03,160: INFO: [raw sql] ()
+2025-09-08 16:45:03,160: INFO: COMMIT
+2025-09-08 16:45:04,086: DEBUG: 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2025-09-08 16:45:04,087: DEBUG: 
+def chunks(task, it, n):
+    return 1
+
+2025-09-08 16:45:04,087: DEBUG: 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2025-09-08 16:45:04,087: DEBUG: 
+def remind(message):
+    return 1
+
+2025-09-08 16:45:04,087: DEBUG: 
+def file_extract(document):
+    return 1
+
+2025-09-08 16:45:04,087: DEBUG: 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2025-09-08 16:45:04,087: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-08 16:45:04,087: DEBUG: 
+def xmap(task, it):
+    return 1
+
+2025-09-08 16:45:04,087: DEBUG: 
+def backend_cleanup():
+    return 1
+
+2025-09-08 16:45:04,087: DEBUG: 
+def async_set_redis(key, value, expire=0):
+    return 1
+
+2025-09-08 16:45:04,088: DEBUG: 
+def chain(*args, **kwargs):
+    return 1
+
+2025-09-08 16:45:04,088: DEBUG: 
+def xstarmap(task, it):
+    return 1
+
+2025-09-08 16:45:04,088: DEBUG: 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2025-09-08 16:45:57,378: INFO: BEGIN (implicit)
+2025-09-08 16:45:57,378: INFO: PRAGMA main.table_info("contract_citation_links")
+2025-09-08 16:45:57,378: INFO: [raw sql] ()
+2025-09-08 16:45:57,379: INFO: PRAGMA main.table_info("documents")
+2025-09-08 16:45:57,379: INFO: [raw sql] ()
+2025-09-08 16:45:57,379: INFO: PRAGMA main.table_info("citations")
+2025-09-08 16:45:57,379: INFO: [raw sql] ()
+2025-09-08 16:45:57,379: INFO: PRAGMA main.table_info("requisites")
+2025-09-08 16:45:57,379: INFO: [raw sql] ()
+2025-09-08 16:45:57,379: INFO: PRAGMA main.table_info("contracts")
+2025-09-08 16:45:57,379: INFO: [raw sql] ()
+2025-09-08 16:45:57,379: INFO: PRAGMA main.table_info("obligations")
+2025-09-08 16:45:57,379: INFO: [raw sql] ()
+2025-09-08 16:45:57,379: INFO: PRAGMA main.table_info("reminders")
+2025-09-08 16:45:57,379: INFO: [raw sql] ()
+2025-09-08 16:45:57,379: INFO: COMMIT
+2025-09-08 16:46:04,117: DEBUG: 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2025-09-08 16:46:04,117: DEBUG: 
+def chunks(task, it, n):
+    return 1
+
+2025-09-08 16:46:04,117: DEBUG: 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2025-09-08 16:46:04,117: DEBUG: 
+def file_extract(document):
+    return 1
+
+2025-09-08 16:46:04,118: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-08 16:46:04,118: DEBUG: 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2025-09-08 16:46:04,118: DEBUG: 
+def xmap(task, it):
+    return 1
+
+2025-09-08 16:46:04,118: DEBUG: 
+def backend_cleanup():
+    return 1
+
+2025-09-08 16:46:04,118: DEBUG: 
+def async_set_redis(key, value, expire=0):
+    return 1
+
+2025-09-08 16:46:04,118: DEBUG: 
+def chain(*args, **kwargs):
+    return 1
+
+2025-09-08 16:46:04,118: DEBUG: 
+def xstarmap(task, it):
+    return 1
+
+2025-09-08 16:46:04,118: DEBUG: 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2025-09-09 21:44:40,074: DEBUG: 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2025-09-09 21:44:40,074: DEBUG: 
+def chunks(task, it, n):
+    return 1
+
+2025-09-09 21:44:40,074: DEBUG: 
+def file_extract(document):
+    return 1
+
+2025-09-09 21:44:40,074: DEBUG: 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2025-09-09 21:44:40,075: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-09 21:44:40,075: DEBUG: 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2025-09-09 21:44:40,075: DEBUG: 
+def xmap(task, it):
+    return 1
+
+2025-09-09 21:44:40,075: DEBUG: 
+def async_set_redis(key, value, expire=0):
+    return 1
+
+2025-09-09 21:44:40,075: DEBUG: 
+def backend_cleanup():
+    return 1
+
+2025-09-09 21:44:40,075: DEBUG: 
+def chain(*args, **kwargs):
+    return 1
+
+2025-09-09 21:44:40,075: DEBUG: 
+def xstarmap(task, it):
+    return 1
+
+2025-09-09 21:44:40,075: DEBUG: 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2025-09-09 21:44:44,369: INFO: BEGIN (implicit)
+2025-09-09 21:44:44,370: INFO: PRAGMA main.table_info("contract_citation_links")
+2025-09-09 21:44:44,370: INFO: [raw sql] ()
+2025-09-09 21:44:44,371: INFO: PRAGMA main.table_info("documents")
+2025-09-09 21:44:44,371: INFO: [raw sql] ()
+2025-09-09 21:44:44,371: INFO: PRAGMA main.table_info("citations")
+2025-09-09 21:44:44,371: INFO: [raw sql] ()
+2025-09-09 21:44:44,371: INFO: PRAGMA main.table_info("requisites")
+2025-09-09 21:44:44,371: INFO: [raw sql] ()
+2025-09-09 21:44:44,371: INFO: PRAGMA main.table_info("contracts")
+2025-09-09 21:44:44,371: INFO: [raw sql] ()
+2025-09-09 21:44:44,371: INFO: PRAGMA main.table_info("obligations")
+2025-09-09 21:44:44,371: INFO: [raw sql] ()
+2025-09-09 21:44:44,371: INFO: PRAGMA main.table_info("reminders")
+2025-09-09 21:44:44,371: INFO: [raw sql] ()
+2025-09-09 21:44:44,372: INFO: COMMIT
+2025-09-09 21:45:06,669: DEBUG: Calling on_part_begin with no data
+2025-09-09 21:45:06,671: DEBUG: Calling on_header_field with data[42:61]
+2025-09-09 21:45:06,671: DEBUG: Calling on_header_value with data[63:119]
+2025-09-09 21:45:06,671: DEBUG: Calling on_header_end with no data
+2025-09-09 21:45:06,671: DEBUG: Calling on_header_field with data[121:133]
+2025-09-09 21:45:06,671: DEBUG: Calling on_header_value with data[135:150]
+2025-09-09 21:45:06,671: DEBUG: Calling on_header_end with no data
+2025-09-09 21:45:06,671: DEBUG: Calling on_headers_finished with no data
+2025-09-09 21:45:06,671: DEBUG: Calling on_part_data with data[154:255331]
+2025-09-09 21:45:06,672: DEBUG: Calling on_part_data with data[0:256000]
+2025-09-09 21:45:06,672: DEBUG: Calling on_part_data with data[0:256000]
+2025-09-09 21:45:06,672: DEBUG: Calling on_part_data with data[0:256000]
+2025-09-09 21:45:06,672: DEBUG: Calling on_part_data with data[0:256000]
+2025-09-09 21:45:06,689: DEBUG: Calling on_part_data with data[0:256000]
+2025-09-09 21:45:06,689: DEBUG: Calling on_part_data with data[0:256000]
+2025-09-09 21:45:06,690: DEBUG: Calling on_part_data with data[0:256000]
+2025-09-09 21:45:06,690: DEBUG: Calling on_part_data with data[0:256000]
+2025-09-09 21:45:06,691: DEBUG: Calling on_part_data with data[0:256000]
+2025-09-09 21:45:06,691: DEBUG: Calling on_part_data with data[0:256000]
+2025-09-09 21:45:06,691: DEBUG: Calling on_part_data with data[0:256000]
+2025-09-09 21:45:06,691: DEBUG: Calling on_part_data with data[0:256000]
+2025-09-09 21:45:06,692: DEBUG: Calling on_part_data with data[0:166798]
+2025-09-09 21:45:06,692: DEBUG: Calling on_part_end with no data
+2025-09-09 21:45:06,692: DEBUG: Calling on_end with no data
+2025-09-09 21:45:06,721: INFO: BEGIN (implicit)
+2025-09-09 21:45:06,725: INFO: SELECT documents.id AS documents_id, documents.filename AS documents_filename, documents.upload_date AS documents_upload_date, documents.file_path AS documents_file_path 
+FROM documents 
+WHERE documents.filename = ?
+ LIMIT ? OFFSET ?
+2025-09-09 21:45:06,725: INFO: [generated in 0.00048s] ('шалпщваш.pdf', 1, 0)
+2025-09-09 21:45:06,736: INFO: INSERT INTO documents (filename, upload_date, file_path) VALUES (?, ?, ?)
+2025-09-09 21:45:06,736: INFO: [generated in 0.00018s] ('шалпщваш.pdf', '2025-09-09 21:44:41.909527', '/Users/ddrxg/Code/ParserPDFforRemind/uploads/шалпщваш.pdf')
+2025-09-09 21:45:06,737: INFO: COMMIT
+2025-09-09 21:45:06,738: INFO: BEGIN (implicit)
+2025-09-09 21:45:06,738: INFO: SELECT documents.id, documents.filename, documents.upload_date, documents.file_path 
+FROM documents 
+WHERE documents.id = ?
+2025-09-09 21:45:06,739: INFO: [generated in 0.00008s] (1,)
+2025-09-09 21:45:06,745: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-09 21:45:07,599: INFO: ROLLBACK
+2025-09-09 21:46:20,056: INFO: BEGIN (implicit)
+2025-09-09 21:46:20,056: INFO: PRAGMA main.table_info("contract_citation_links")
+2025-09-09 21:46:20,056: INFO: [raw sql] ()
+2025-09-09 21:46:20,057: INFO: PRAGMA temp.table_info("contract_citation_links")
+2025-09-09 21:46:20,057: INFO: [raw sql] ()
+2025-09-09 21:46:20,057: INFO: PRAGMA main.table_info("documents")
+2025-09-09 21:46:20,057: INFO: [raw sql] ()
+2025-09-09 21:46:20,057: INFO: PRAGMA temp.table_info("documents")
+2025-09-09 21:46:20,057: INFO: [raw sql] ()
+2025-09-09 21:46:20,057: INFO: PRAGMA main.table_info("citations")
+2025-09-09 21:46:20,057: INFO: [raw sql] ()
+2025-09-09 21:46:20,057: INFO: PRAGMA temp.table_info("citations")
+2025-09-09 21:46:20,057: INFO: [raw sql] ()
+2025-09-09 21:46:20,057: INFO: PRAGMA main.table_info("requisites")
+2025-09-09 21:46:20,057: INFO: [raw sql] ()
+2025-09-09 21:46:20,057: INFO: PRAGMA temp.table_info("requisites")
+2025-09-09 21:46:20,057: INFO: [raw sql] ()
+2025-09-09 21:46:20,057: INFO: PRAGMA main.table_info("contracts")
+2025-09-09 21:46:20,057: INFO: [raw sql] ()
+2025-09-09 21:46:20,057: INFO: PRAGMA temp.table_info("contracts")
+2025-09-09 21:46:20,057: INFO: [raw sql] ()
+2025-09-09 21:46:20,057: INFO: PRAGMA main.table_info("obligations")
+2025-09-09 21:46:20,057: INFO: [raw sql] ()
+2025-09-09 21:46:20,058: INFO: PRAGMA temp.table_info("obligations")
+2025-09-09 21:46:20,058: INFO: [raw sql] ()
+2025-09-09 21:46:20,058: INFO: PRAGMA main.table_info("reminders")
+2025-09-09 21:46:20,058: INFO: [raw sql] ()
+2025-09-09 21:46:20,058: INFO: PRAGMA temp.table_info("reminders")
+2025-09-09 21:46:20,058: INFO: [raw sql] ()
+2025-09-09 21:46:20,058: INFO: 
+CREATE TABLE documents (
+	id INTEGER NOT NULL, 
+	filename VARCHAR NOT NULL, 
+	upload_date DATETIME, 
+	file_path VARCHAR, 
+	PRIMARY KEY (id)
+)
+
+
+2025-09-09 21:46:20,058: INFO: [no key 0.00004s] ()
+2025-09-09 21:46:20,059: INFO: CREATE INDEX ix_documents_id ON documents (id)
+2025-09-09 21:46:20,059: INFO: [no key 0.00010s] ()
+2025-09-09 21:46:20,059: INFO: 
+CREATE TABLE citations (
+	id INTEGER NOT NULL, 
+	document_id INTEGER NOT NULL, 
+	text VARCHAR NOT NULL, 
+	page INTEGER, 
+	bbox JSON, 
+	paragraph_index INTEGER, 
+	run_index INTEGER, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(document_id) REFERENCES documents (id)
+)
+
+
+2025-09-09 21:46:20,059: INFO: [no key 0.00004s] ()
+2025-09-09 21:46:20,059: INFO: CREATE INDEX ix_citations_id ON citations (id)
+2025-09-09 21:46:20,060: INFO: [no key 0.00003s] ()
+2025-09-09 21:46:20,060: INFO: 
+CREATE TABLE contracts (
+	id INTEGER NOT NULL, 
+	document_id INTEGER NOT NULL, 
+	citation_data JSON, 
+	parsed_amount FLOAT, 
+	parsed_currency VARCHAR, 
+	parsed_penalty_present BOOLEAN, 
+	PRIMARY KEY (id), 
+	UNIQUE (document_id), 
+	FOREIGN KEY(document_id) REFERENCES documents (id)
+)
+
+
+2025-09-09 21:46:20,060: INFO: [no key 0.00006s] ()
+2025-09-09 21:46:20,061: INFO: CREATE INDEX ix_contracts_id ON contracts (id)
+2025-09-09 21:46:20,061: INFO: [no key 0.00006s] ()
+2025-09-09 21:46:20,061: INFO: 
+CREATE TABLE contract_citation_links (
+	contract_id INTEGER NOT NULL, 
+	citation_id INTEGER NOT NULL, 
+	field_name VARCHAR(50) NOT NULL, 
+	PRIMARY KEY (contract_id, citation_id), 
+	FOREIGN KEY(contract_id) REFERENCES contracts (id), 
+	FOREIGN KEY(citation_id) REFERENCES citations (id)
+)
+
+
+2025-09-09 21:46:20,061: INFO: [no key 0.00007s] ()
+2025-09-09 21:46:20,062: INFO: 
+CREATE TABLE requisites (
+	id INTEGER NOT NULL, 
+	contract_id INTEGER NOT NULL, 
+	inn_id INTEGER, 
+	kpp_id INTEGER, 
+	ogrn_id INTEGER, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(contract_id) REFERENCES contracts (id), 
+	FOREIGN KEY(inn_id) REFERENCES citations (id), 
+	FOREIGN KEY(kpp_id) REFERENCES citations (id), 
+	FOREIGN KEY(ogrn_id) REFERENCES citations (id)
+)
+
+
+2025-09-09 21:46:20,062: INFO: [no key 0.00005s] ()
+2025-09-09 21:46:20,063: INFO: CREATE INDEX ix_requisites_id ON requisites (id)
+2025-09-09 21:46:20,063: INFO: [no key 0.00004s] ()
+2025-09-09 21:46:20,063: INFO: 
+CREATE TABLE obligations (
+	id INTEGER NOT NULL, 
+	contract_id INTEGER NOT NULL, 
+	description VARCHAR NOT NULL, 
+	due_date DATETIME, 
+	status VARCHAR, 
+	citation_id INTEGER, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(contract_id) REFERENCES contracts (id), 
+	FOREIGN KEY(citation_id) REFERENCES citations (id)
+)
+
+
+2025-09-09 21:46:20,063: INFO: [no key 0.00004s] ()
+2025-09-09 21:46:20,064: INFO: CREATE INDEX ix_obligations_id ON obligations (id)
+2025-09-09 21:46:20,064: INFO: [no key 0.00003s] ()
+2025-09-09 21:46:20,064: INFO: 
+CREATE TABLE reminders (
+	id INTEGER NOT NULL, 
+	obligation_id INTEGER NOT NULL, 
+	remind_date DATETIME NOT NULL, 
+	channel VARCHAR, 
+	sent BOOLEAN, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(obligation_id) REFERENCES obligations (id)
+)
+
+
+2025-09-09 21:46:20,064: INFO: [no key 0.00005s] ()
+2025-09-09 21:46:20,064: INFO: CREATE INDEX ix_reminders_id ON reminders (id)
+2025-09-09 21:46:20,065: INFO: [no key 0.00004s] ()
+2025-09-09 21:46:20,065: INFO: COMMIT
+2025-09-09 21:46:22,096: DEBUG: 
+def chord(self, header, body, partial_args=0, interval=1, countdown=2, max_retries=3, eager=4, **kwargs):
+    return 1
+
+2025-09-09 21:46:22,096: DEBUG: 
+def chunks(task, it, n):
+    return 1
+
+2025-09-09 21:46:22,096: DEBUG: 
+def file_extract(document):
+    return 1
+
+2025-09-09 21:46:22,096: DEBUG: 
+def unlock_chord(self, group_id, callback, interval=0, max_retries=1, result=2, Result=3, GroupResult=4, result_from_tuple=5, **kwargs):
+    return 1
+
+2025-09-09 21:46:22,096: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-09 21:46:22,096: DEBUG: 
+def group(self, tasks, result, group_id, partial_args, add_to_parent=0):
+    return 1
+
+2025-09-09 21:46:22,096: DEBUG: 
+def xmap(task, it):
+    return 1
+
+2025-09-09 21:46:22,096: DEBUG: 
+def async_set_redis(key, value, expire=0):
+    return 1
+
+2025-09-09 21:46:22,096: DEBUG: 
+def backend_cleanup():
+    return 1
+
+2025-09-09 21:46:22,097: DEBUG: 
+def chain(*args, **kwargs):
+    return 1
+
+2025-09-09 21:46:22,097: DEBUG: 
+def xstarmap(task, it):
+    return 1
+
+2025-09-09 21:46:22,097: DEBUG: 
+def accumulate(self, *args, **kwargs):
+    return 1
+
+2025-09-09 21:46:28,544: DEBUG: Calling on_part_begin with no data
+2025-09-09 21:46:28,545: DEBUG: Calling on_header_field with data[42:61]
+2025-09-09 21:46:28,545: DEBUG: Calling on_header_value with data[63:119]
+2025-09-09 21:46:28,545: DEBUG: Calling on_header_end with no data
+2025-09-09 21:46:28,545: DEBUG: Calling on_header_field with data[121:133]
+2025-09-09 21:46:28,545: DEBUG: Calling on_header_value with data[135:150]
+2025-09-09 21:46:28,545: DEBUG: Calling on_header_end with no data
+2025-09-09 21:46:28,545: DEBUG: Calling on_headers_finished with no data
+2025-09-09 21:46:28,545: DEBUG: Calling on_part_data with data[154:255331]
+2025-09-09 21:46:28,546: DEBUG: Calling on_part_data with data[0:256000]
+2025-09-09 21:46:28,546: DEBUG: Calling on_part_data with data[0:256000]
+2025-09-09 21:46:28,546: DEBUG: Calling on_part_data with data[0:182941]
+2025-09-09 21:46:28,546: DEBUG: Calling on_part_data with data[0:81920]
+2025-09-09 21:46:28,547: DEBUG: Calling on_part_data with data[0:147456]
+2025-09-09 21:46:28,569: DEBUG: Calling on_part_data with data[0:256000]
+2025-09-09 21:46:28,570: DEBUG: Calling on_part_data with data[0:256000]
+2025-09-09 21:46:28,571: DEBUG: Calling on_part_data with data[0:256000]
+2025-09-09 21:46:28,572: DEBUG: Calling on_part_data with data[0:256000]
+2025-09-09 21:46:28,573: DEBUG: Calling on_part_data with data[0:256000]
+2025-09-09 21:46:28,577: DEBUG: Calling on_part_data with data[0:256000]
+2025-09-09 21:46:28,578: DEBUG: Calling on_part_data with data[0:256000]
+2025-09-09 21:46:28,579: DEBUG: Calling on_part_data with data[0:256000]
+2025-09-09 21:46:28,579: DEBUG: Calling on_part_data with data[0:256000]
+2025-09-09 21:46:28,579: DEBUG: Calling on_part_data with data[0:10481]
+2025-09-09 21:46:28,579: DEBUG: Calling on_part_end with no data
+2025-09-09 21:46:28,579: DEBUG: Calling on_end with no data
+2025-09-09 21:46:28,602: INFO: BEGIN (implicit)
+2025-09-09 21:46:28,605: INFO: SELECT documents.id AS documents_id, documents.filename AS documents_filename, documents.upload_date AS documents_upload_date, documents.file_path AS documents_file_path 
+FROM documents 
+WHERE documents.filename = ?
+ LIMIT ? OFFSET ?
+2025-09-09 21:46:28,605: INFO: [generated in 0.00021s] ('шалпщваш.pdf', 1, 0)
+2025-09-09 21:46:28,612: INFO: INSERT INTO documents (filename, upload_date, file_path) VALUES (?, ?, ?)
+2025-09-09 21:46:28,612: INFO: [generated in 0.00103s] ('шалпщваш.pdf', '2025-09-09 21:46:18.478388', '/Users/ddrxg/Code/ParserPDFforRemind/uploads/шалпщваш.pdf')
+2025-09-09 21:46:28,613: INFO: COMMIT
+2025-09-09 21:46:28,616: INFO: BEGIN (implicit)
+2025-09-09 21:46:28,616: INFO: SELECT documents.id, documents.filename, documents.upload_date, documents.file_path 
+FROM documents 
+WHERE documents.id = ?
+2025-09-09 21:46:28,617: INFO: [generated in 0.00022s] (1,)
+2025-09-09 21:46:28,623: DEBUG: 
+def process_document(document_id, file_path):
+    return 1
+
+2025-09-09 21:46:29,393: INFO: ROLLBACK
+2025-09-09 21:47:53,151: DEBUG: Calling on_part_begin with no data
+2025-09-09 21:47:53,154: DEBUG: Calling on_header_field with data[42:61]
+2025-09-09 21:47:53,154: DEBUG: Calling on_header_value with data[63:139]
+2025-09-09 21:47:53,154: DEBUG: Calling on_header_end with no data
+2025-09-09 21:47:53,154: DEBUG: Calling on_header_field with data[141:153]
+2025-09-09 21:47:53,154: DEBUG: Calling on_header_value with data[155:226]
+2025-09-09 21:47:53,154: DEBUG: Calling on_header_end with no data
+2025-09-09 21:47:53,154: DEBUG: Calling on_headers_finished with no data
+2025-09-09 21:47:53,155: DEBUG: Calling on_part_data with data[230:173116]
+2025-09-09 21:47:53,156: DEBUG: Calling on_part_end with no data
+2025-09-09 21:47:53,157: DEBUG: Calling on_end with no data
+2025-09-09 21:47:53,181: INFO: BEGIN (implicit)
+2025-09-09 21:47:53,183: INFO: SELECT documents.id AS documents_id, documents.filename AS documents_filename, documents.upload_date AS documents_upload_date, documents.file_path AS documents_file_path 
+FROM documents 
+WHERE documents.filename = ?
+ LIMIT ? OFFSET ?
+2025-09-09 21:47:53,183: INFO: [cached since 84.58s ago] ('Договор Маросейка.docx', 1, 0)
+2025-09-09 21:47:53,192: INFO: INSERT INTO documents (filename, upload_date, file_path) VALUES (?, ?, ?)
+2025-09-09 21:47:53,192: INFO: [cached since 84.59s ago] ('Договор Маросейка.docx', '2025-09-09 21:46:18.478388', '/Users/ddrxg/Code/ParserPDFforRemind/uploads/Договор Маросейка.docx')
+2025-09-09 21:47:53,194: INFO: COMMIT
+2025-09-09 21:47:53,195: INFO: BEGIN (implicit)
+2025-09-09 21:47:53,195: INFO: SELECT documents.id, documents.filename, documents.upload_date, documents.file_path 
+FROM documents 
+WHERE documents.id = ?
+2025-09-09 21:47:53,195: INFO: [cached since 84.58s ago] (2,)
+2025-09-09 21:47:53,296: INFO: ROLLBACK
+2025-09-09 21:48:24,024: INFO: BEGIN (implicit)
+2025-09-09 21:48:24,027: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-09 21:48:24,027: INFO: [generated in 0.00043s] (2,)
+2025-09-09 21:48:24,037: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 21:48:24,037: INFO: [generated in 0.00016s] (2, 1, 0)
+2025-09-09 21:48:24,038: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 21:48:24,038: INFO: [generated in 0.00015s] (1, 1, 0)
+2025-09-09 21:48:24,039: INFO: COMMIT
+2025-09-09 21:48:24,040: INFO: BEGIN (implicit)
+2025-09-09 21:48:24,086: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-09 21:48:24,086: INFO: [generated in 0.00067s] (1,)
+2025-09-09 21:48:24,089: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-09 21:48:24,093: INFO: [generated in 0.00327s] (1,)
+2025-09-09 21:48:24,093: INFO: COMMIT
+2025-09-09 22:24:33,087: INFO: BEGIN (implicit)
+2025-09-09 22:24:33,088: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-09 22:24:33,088: INFO: [generated in 0.00010s] (2,)
+2025-09-09 22:24:33,094: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:24:33,095: INFO: [generated in 0.00014s] (2, 1, 0)
+2025-09-09 22:24:33,095: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:24:33,095: INFO: [generated in 0.00009s] (1, 1, 0)
+2025-09-09 22:24:33,096: INFO: COMMIT
+2025-09-09 22:24:33,097: INFO: BEGIN (implicit)
+2025-09-09 22:24:33,097: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-09 22:24:33,097: INFO: [generated in 0.00009s] (1,)
+2025-09-09 22:24:33,098: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-09 22:24:33,098: INFO: [generated in 0.00009s] (1,)
+2025-09-09 22:24:33,098: INFO: COMMIT
+2025-09-09 22:24:52,998: INFO: BEGIN (implicit)
+2025-09-09 22:24:53,000: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-09 22:24:53,000: INFO: [generated in 0.00010s] (2,)
+2025-09-09 22:24:53,006: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:24:53,006: INFO: [generated in 0.00014s] (2, 1, 0)
+2025-09-09 22:24:53,007: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:24:53,007: INFO: [generated in 0.00008s] (1, 1, 0)
+2025-09-09 22:24:53,007: INFO: COMMIT
+2025-09-09 22:24:53,007: INFO: BEGIN (implicit)
+2025-09-09 22:24:53,008: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-09 22:24:53,008: INFO: [generated in 0.00006s] (1,)
+2025-09-09 22:24:53,008: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-09 22:24:53,008: INFO: [generated in 0.00006s] (1,)
+2025-09-09 22:24:53,009: INFO: COMMIT
+2025-09-09 22:25:46,637: INFO: BEGIN (implicit)
+2025-09-09 22:25:46,639: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-09 22:25:46,639: INFO: [generated in 0.00010s] (2,)
+2025-09-09 22:25:46,646: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:25:46,646: INFO: [generated in 0.00021s] (2, 1, 0)
+2025-09-09 22:25:46,647: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:25:46,647: INFO: [generated in 0.00008s] (1, 1, 0)
+2025-09-09 22:25:46,647: INFO: COMMIT
+2025-09-09 22:25:46,648: INFO: BEGIN (implicit)
+2025-09-09 22:25:46,648: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-09 22:25:46,648: INFO: [generated in 0.00008s] (1,)
+2025-09-09 22:25:46,649: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-09 22:25:46,649: INFO: [generated in 0.00007s] (1,)
+2025-09-09 22:25:46,649: INFO: COMMIT
+2025-09-09 22:26:09,981: INFO: BEGIN (implicit)
+2025-09-09 22:26:09,983: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-09 22:26:09,983: INFO: [generated in 0.00011s] (2,)
+2025-09-09 22:26:09,988: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:26:09,989: INFO: [generated in 0.00011s] (2, 1, 0)
+2025-09-09 22:26:09,989: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:26:09,989: INFO: [generated in 0.00008s] (1, 1, 0)
+2025-09-09 22:26:09,990: INFO: COMMIT
+2025-09-09 22:26:09,990: INFO: BEGIN (implicit)
+2025-09-09 22:26:09,990: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-09 22:26:09,990: INFO: [generated in 0.00006s] (1,)
+2025-09-09 22:26:09,991: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-09 22:26:09,991: INFO: [generated in 0.00005s] (1,)
+2025-09-09 22:26:09,991: INFO: COMMIT
+2025-09-09 22:26:41,133: INFO: BEGIN (implicit)
+2025-09-09 22:26:41,135: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-09 22:26:41,135: INFO: [generated in 0.00011s] (2,)
+2025-09-09 22:26:41,146: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:26:41,146: INFO: [generated in 0.00017s] (2, 1, 0)
+2025-09-09 22:26:41,147: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:26:41,147: INFO: [generated in 0.00008s] (1, 1, 0)
+2025-09-09 22:26:41,147: INFO: COMMIT
+2025-09-09 22:26:41,148: INFO: BEGIN (implicit)
+2025-09-09 22:26:41,148: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-09 22:26:41,148: INFO: [generated in 0.00006s] (1,)
+2025-09-09 22:26:41,149: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-09 22:26:41,149: INFO: [generated in 0.00006s] (1,)
+2025-09-09 22:26:41,149: INFO: COMMIT
+2025-09-09 22:27:15,040: INFO: BEGIN (implicit)
+2025-09-09 22:27:15,041: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-09 22:27:15,041: INFO: [generated in 0.00010s] (2,)
+2025-09-09 22:27:15,048: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:27:15,048: INFO: [generated in 0.00022s] (2, 1, 0)
+2025-09-09 22:27:15,049: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:27:15,050: INFO: [generated in 0.00009s] (1, 1, 0)
+2025-09-09 22:27:15,050: INFO: COMMIT
+2025-09-09 22:27:15,050: INFO: BEGIN (implicit)
+2025-09-09 22:27:15,051: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-09 22:27:15,051: INFO: [generated in 0.00006s] (1,)
+2025-09-09 22:27:15,051: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-09 22:27:15,051: INFO: [generated in 0.00006s] (1,)
+2025-09-09 22:27:15,052: INFO: COMMIT
+2025-09-09 22:27:41,912: INFO: BEGIN (implicit)
+2025-09-09 22:27:41,913: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-09 22:27:41,913: INFO: [generated in 0.00010s] (2,)
+2025-09-09 22:27:41,919: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:27:41,919: INFO: [generated in 0.00013s] (2, 1, 0)
+2025-09-09 22:27:41,921: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:27:41,921: INFO: [generated in 0.00011s] (1, 1, 0)
+2025-09-09 22:27:41,921: INFO: COMMIT
+2025-09-09 22:27:41,922: INFO: BEGIN (implicit)
+2025-09-09 22:27:41,922: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-09 22:27:41,922: INFO: [generated in 0.00006s] (1,)
+2025-09-09 22:27:41,922: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-09 22:27:41,922: INFO: [generated in 0.00006s] (1,)
+2025-09-09 22:27:41,923: INFO: COMMIT
+2025-09-09 22:28:06,240: INFO: BEGIN (implicit)
+2025-09-09 22:28:06,243: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-09 22:28:06,243: INFO: [generated in 0.00010s] (2,)
+2025-09-09 22:28:06,249: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:28:06,249: INFO: [generated in 0.00014s] (2, 1, 0)
+2025-09-09 22:28:06,249: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:28:06,249: INFO: [generated in 0.00008s] (1, 1, 0)
+2025-09-09 22:28:06,250: INFO: COMMIT
+2025-09-09 22:28:06,250: INFO: BEGIN (implicit)
+2025-09-09 22:28:06,251: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-09 22:28:06,251: INFO: [generated in 0.00007s] (1,)
+2025-09-09 22:28:06,252: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-09 22:28:06,252: INFO: [generated in 0.00017s] (1,)
+2025-09-09 22:28:06,253: INFO: COMMIT
+2025-09-09 22:29:22,853: INFO: BEGIN (implicit)
+2025-09-09 22:29:22,855: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-09 22:29:22,855: INFO: [generated in 0.00014s] (2,)
+2025-09-09 22:29:22,863: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:29:22,864: INFO: [generated in 0.00045s] (2, 1, 0)
+2025-09-09 22:29:22,865: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:29:22,865: INFO: [generated in 0.00011s] (1, 1, 0)
+2025-09-09 22:29:22,865: INFO: COMMIT
+2025-09-09 22:29:22,865: INFO: BEGIN (implicit)
+2025-09-09 22:29:22,866: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-09 22:29:22,866: INFO: [generated in 0.00006s] (1,)
+2025-09-09 22:29:22,866: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-09 22:29:22,866: INFO: [generated in 0.00007s] (1,)
+2025-09-09 22:29:22,867: INFO: COMMIT
+2025-09-09 22:29:32,904: INFO: BEGIN (implicit)
+2025-09-09 22:29:32,906: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-09 22:29:32,906: INFO: [generated in 0.00015s] (2,)
+2025-09-09 22:29:32,915: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:29:32,915: INFO: [generated in 0.00015s] (2, 1, 0)
+2025-09-09 22:29:32,916: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:29:32,916: INFO: [generated in 0.00010s] (1, 1, 0)
+2025-09-09 22:29:32,916: INFO: COMMIT
+2025-09-09 22:29:32,917: INFO: BEGIN (implicit)
+2025-09-09 22:29:32,917: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-09 22:29:32,917: INFO: [generated in 0.00010s] (1,)
+2025-09-09 22:29:32,918: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-09 22:29:32,918: INFO: [generated in 0.00011s] (1,)
+2025-09-09 22:29:32,919: INFO: COMMIT
+2025-09-09 22:29:48,903: INFO: BEGIN (implicit)
+2025-09-09 22:29:48,905: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-09 22:29:48,905: INFO: [generated in 0.00013s] (2,)
+2025-09-09 22:29:48,914: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:29:48,915: INFO: [generated in 0.00018s] (2, 1, 0)
+2025-09-09 22:29:48,916: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:29:48,916: INFO: [generated in 0.00016s] (1, 1, 0)
+2025-09-09 22:29:48,917: INFO: COMMIT
+2025-09-09 22:29:48,918: INFO: BEGIN (implicit)
+2025-09-09 22:29:48,919: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-09 22:29:48,919: INFO: [generated in 0.00011s] (1,)
+2025-09-09 22:29:48,919: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-09 22:29:48,919: INFO: [generated in 0.00007s] (1,)
+2025-09-09 22:29:48,920: INFO: COMMIT
+2025-09-09 22:30:31,649: INFO: BEGIN (implicit)
+2025-09-09 22:30:31,650: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-09 22:30:31,650: INFO: [generated in 0.00011s] (2,)
+2025-09-09 22:30:31,657: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:30:31,657: INFO: [generated in 0.00013s] (2, 1, 0)
+2025-09-09 22:30:31,657: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:30:31,657: INFO: [generated in 0.00007s] (1, 1, 0)
+2025-09-09 22:30:31,658: INFO: COMMIT
+2025-09-09 22:30:31,658: INFO: BEGIN (implicit)
+2025-09-09 22:30:31,659: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-09 22:30:31,659: INFO: [generated in 0.00006s] (1,)
+2025-09-09 22:30:31,659: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-09 22:30:31,659: INFO: [generated in 0.00005s] (1,)
+2025-09-09 22:30:31,659: INFO: COMMIT
+2025-09-09 22:33:41,514: INFO: BEGIN (implicit)
+2025-09-09 22:33:41,515: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-09 22:33:41,515: INFO: [generated in 0.00016s] (2,)
+2025-09-09 22:33:41,522: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:33:41,522: INFO: [generated in 0.00014s] (2, 1, 0)
+2025-09-09 22:33:41,523: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:33:41,523: INFO: [generated in 0.00008s] (1, 1, 0)
+2025-09-09 22:33:41,524: INFO: COMMIT
+2025-09-09 22:33:41,524: INFO: BEGIN (implicit)
+2025-09-09 22:33:41,524: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-09 22:33:41,524: INFO: [generated in 0.00006s] (1,)
+2025-09-09 22:33:41,525: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-09 22:33:41,525: INFO: [generated in 0.00006s] (1,)
+2025-09-09 22:33:41,525: INFO: COMMIT
+2025-09-09 22:35:11,613: INFO: BEGIN (implicit)
+2025-09-09 22:35:11,615: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-09 22:35:11,615: INFO: [generated in 0.00010s] (2,)
+2025-09-09 22:35:11,621: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:35:11,621: INFO: [generated in 0.00015s] (2, 1, 0)
+2025-09-09 22:35:11,622: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:35:11,622: INFO: [generated in 0.00007s] (1, 1, 0)
+2025-09-09 22:35:11,622: INFO: COMMIT
+2025-09-09 22:35:11,623: INFO: BEGIN (implicit)
+2025-09-09 22:35:11,623: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-09 22:35:11,623: INFO: [generated in 0.00009s] (1,)
+2025-09-09 22:35:11,624: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-09 22:35:11,624: INFO: [generated in 0.00008s] (1,)
+2025-09-09 22:35:11,624: INFO: COMMIT
+2025-09-09 22:35:50,458: INFO: BEGIN (implicit)
+2025-09-09 22:35:50,460: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-09 22:35:50,460: INFO: [generated in 0.00038s] (2,)
+2025-09-09 22:35:50,467: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:35:50,467: INFO: [generated in 0.00015s] (2, 1, 0)
+2025-09-09 22:35:50,468: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:35:50,468: INFO: [generated in 0.00009s] (1, 1, 0)
+2025-09-09 22:35:50,468: INFO: COMMIT
+2025-09-09 22:35:50,469: INFO: BEGIN (implicit)
+2025-09-09 22:35:50,469: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-09 22:35:50,469: INFO: [generated in 0.00007s] (1,)
+2025-09-09 22:35:50,470: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-09 22:35:50,470: INFO: [generated in 0.00017s] (1,)
+2025-09-09 22:35:50,471: INFO: COMMIT
+2025-09-09 22:44:20,112: INFO: BEGIN (implicit)
+2025-09-09 22:44:20,114: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-09 22:44:20,114: INFO: [generated in 0.00010s] (2,)
+2025-09-09 22:44:20,120: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:44:20,120: INFO: [generated in 0.00014s] (2, 1, 0)
+2025-09-09 22:44:20,121: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:44:20,122: INFO: [generated in 0.00010s] (1, 1, 0)
+2025-09-09 22:44:20,122: INFO: COMMIT
+2025-09-09 22:44:20,122: INFO: BEGIN (implicit)
+2025-09-09 22:44:20,123: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-09 22:44:20,123: INFO: [generated in 0.00021s] (1,)
+2025-09-09 22:44:20,124: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-09 22:44:20,124: INFO: [generated in 0.00008s] (1,)
+2025-09-09 22:44:20,125: INFO: COMMIT
+2025-09-09 22:45:15,537: INFO: BEGIN (implicit)
+2025-09-09 22:45:15,539: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-09 22:45:15,539: INFO: [generated in 0.00010s] (2,)
+2025-09-09 22:45:15,546: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:45:15,546: INFO: [generated in 0.00013s] (2, 1, 0)
+2025-09-09 22:45:15,547: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:45:15,547: INFO: [generated in 0.00008s] (1, 1, 0)
+2025-09-09 22:45:15,547: INFO: COMMIT
+2025-09-09 22:45:15,547: INFO: BEGIN (implicit)
+2025-09-09 22:45:15,548: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-09 22:45:15,548: INFO: [generated in 0.00006s] (1,)
+2025-09-09 22:45:15,548: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-09 22:45:15,548: INFO: [generated in 0.00006s] (1,)
+2025-09-09 22:45:15,549: INFO: COMMIT
+2025-09-09 22:46:39,557: INFO: BEGIN (implicit)
+2025-09-09 22:46:39,558: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-09 22:46:39,558: INFO: [generated in 0.00010s] (2,)
+2025-09-09 22:46:39,564: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:46:39,565: INFO: [generated in 0.00013s] (2, 1, 0)
+2025-09-09 22:46:39,565: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:46:39,565: INFO: [generated in 0.00007s] (1, 1, 0)
+2025-09-09 22:46:39,566: INFO: COMMIT
+2025-09-09 22:46:39,566: INFO: BEGIN (implicit)
+2025-09-09 22:46:39,567: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-09 22:46:39,567: INFO: [generated in 0.00008s] (1,)
+2025-09-09 22:46:39,567: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-09 22:46:39,567: INFO: [generated in 0.00007s] (1,)
+2025-09-09 22:46:39,568: INFO: COMMIT
+2025-09-09 22:47:56,152: INFO: BEGIN (implicit)
+2025-09-09 22:47:56,154: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-09 22:47:56,154: INFO: [generated in 0.00010s] (2,)
+2025-09-09 22:47:56,163: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:47:56,163: INFO: [generated in 0.00017s] (2, 1, 0)
+2025-09-09 22:47:56,164: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:47:56,164: INFO: [generated in 0.00008s] (1, 1, 0)
+2025-09-09 22:47:56,165: INFO: COMMIT
+2025-09-09 22:47:56,165: INFO: BEGIN (implicit)
+2025-09-09 22:47:56,166: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-09 22:47:56,166: INFO: [generated in 0.00007s] (1,)
+2025-09-09 22:47:56,166: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-09 22:47:56,166: INFO: [generated in 0.00007s] (1,)
+2025-09-09 22:47:56,167: INFO: COMMIT
+2025-09-09 22:49:54,993: INFO: BEGIN (implicit)
+2025-09-09 22:49:54,995: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-09 22:49:54,995: INFO: [generated in 0.00010s] (2,)
+2025-09-09 22:49:55,002: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:49:55,002: INFO: [generated in 0.00018s] (2, 1, 0)
+2025-09-09 22:49:55,003: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-09 22:49:55,003: INFO: [generated in 0.00007s] (1, 1, 0)
+2025-09-09 22:49:55,004: INFO: COMMIT
+2025-09-09 22:49:55,004: INFO: BEGIN (implicit)
+2025-09-09 22:49:55,005: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-09 22:49:55,005: INFO: [generated in 0.00006s] (1,)
+2025-09-09 22:49:55,005: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-09 22:49:55,005: INFO: [generated in 0.00006s] (1,)
+2025-09-09 22:49:55,005: INFO: COMMIT
+2025-09-10 13:13:19,178: INFO: BEGIN (implicit)
+2025-09-10 13:13:19,180: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-10 13:13:19,180: INFO: [generated in 0.00011s] (2,)
+2025-09-10 13:13:19,187: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:13:19,187: INFO: [generated in 0.00013s] (2, 1, 0)
+2025-09-10 13:13:19,188: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:13:19,188: INFO: [generated in 0.00008s] (1, 1, 0)
+2025-09-10 13:13:19,188: INFO: COMMIT
+2025-09-10 13:13:19,189: INFO: BEGIN (implicit)
+2025-09-10 13:13:19,189: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-10 13:13:19,189: INFO: [generated in 0.00006s] (1,)
+2025-09-10 13:13:19,189: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-10 13:13:19,189: INFO: [generated in 0.00006s] (1,)
+2025-09-10 13:13:19,190: INFO: COMMIT
+2025-09-10 13:13:47,127: INFO: BEGIN (implicit)
+2025-09-10 13:13:47,129: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-10 13:13:47,129: INFO: [generated in 0.00010s] (2,)
+2025-09-10 13:13:47,136: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:13:47,137: INFO: [generated in 0.00011s] (2, 1, 0)
+2025-09-10 13:13:47,137: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:13:47,137: INFO: [generated in 0.00008s] (1, 1, 0)
+2025-09-10 13:13:47,138: INFO: COMMIT
+2025-09-10 13:13:47,138: INFO: BEGIN (implicit)
+2025-09-10 13:13:47,138: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-10 13:13:47,138: INFO: [generated in 0.00006s] (1,)
+2025-09-10 13:13:47,139: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-10 13:13:47,139: INFO: [generated in 0.00006s] (1,)
+2025-09-10 13:13:47,139: INFO: COMMIT
+2025-09-10 13:15:30,426: INFO: BEGIN (implicit)
+2025-09-10 13:15:30,428: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-10 13:15:30,428: INFO: [generated in 0.00014s] (2,)
+2025-09-10 13:15:30,439: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:15:30,439: INFO: [generated in 0.00015s] (2, 1, 0)
+2025-09-10 13:15:30,440: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:15:30,440: INFO: [generated in 0.00009s] (1, 1, 0)
+2025-09-10 13:15:30,440: INFO: COMMIT
+2025-09-10 13:15:30,441: INFO: BEGIN (implicit)
+2025-09-10 13:15:30,441: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-10 13:15:30,441: INFO: [generated in 0.00007s] (1,)
+2025-09-10 13:15:30,442: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-10 13:15:30,442: INFO: [generated in 0.00006s] (1,)
+2025-09-10 13:15:30,442: INFO: COMMIT
+2025-09-10 13:19:22,899: INFO: BEGIN (implicit)
+2025-09-10 13:19:22,901: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-10 13:19:22,901: INFO: [generated in 0.00015s] (2,)
+2025-09-10 13:19:22,911: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:19:22,911: INFO: [generated in 0.00014s] (2, 1, 0)
+2025-09-10 13:19:22,912: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:19:22,912: INFO: [generated in 0.00007s] (1, 1, 0)
+2025-09-10 13:19:22,913: INFO: COMMIT
+2025-09-10 13:19:22,913: INFO: BEGIN (implicit)
+2025-09-10 13:19:22,913: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-10 13:19:22,913: INFO: [generated in 0.00008s] (1,)
+2025-09-10 13:19:22,915: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-10 13:19:22,915: INFO: [generated in 0.00010s] (1,)
+2025-09-10 13:19:22,915: INFO: COMMIT
+2025-09-10 13:19:48,295: INFO: BEGIN (implicit)
+2025-09-10 13:19:48,296: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-10 13:19:48,296: INFO: [generated in 0.00013s] (2,)
+2025-09-10 13:19:48,307: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:19:48,308: INFO: [generated in 0.00015s] (2, 1, 0)
+2025-09-10 13:19:48,308: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:19:48,308: INFO: [generated in 0.00007s] (1, 1, 0)
+2025-09-10 13:19:48,309: INFO: COMMIT
+2025-09-10 13:19:48,309: INFO: BEGIN (implicit)
+2025-09-10 13:19:48,310: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-10 13:19:48,310: INFO: [generated in 0.00007s] (1,)
+2025-09-10 13:19:48,310: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-10 13:19:48,310: INFO: [generated in 0.00006s] (1,)
+2025-09-10 13:19:48,311: INFO: COMMIT
+2025-09-10 13:20:33,485: INFO: BEGIN (implicit)
+2025-09-10 13:20:33,486: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-10 13:20:33,486: INFO: [generated in 0.00010s] (2,)
+2025-09-10 13:20:33,496: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:20:33,496: INFO: [generated in 0.00014s] (2, 1, 0)
+2025-09-10 13:20:33,497: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:20:33,497: INFO: [generated in 0.00008s] (1, 1, 0)
+2025-09-10 13:20:33,499: INFO: COMMIT
+2025-09-10 13:20:33,499: INFO: BEGIN (implicit)
+2025-09-10 13:20:33,500: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-10 13:20:33,500: INFO: [generated in 0.00008s] (1,)
+2025-09-10 13:20:33,500: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-10 13:20:33,501: INFO: [generated in 0.00006s] (1,)
+2025-09-10 13:20:33,501: INFO: COMMIT
+2025-09-10 13:20:59,976: INFO: BEGIN (implicit)
+2025-09-10 13:20:59,977: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-10 13:20:59,977: INFO: [generated in 0.00012s] (2,)
+2025-09-10 13:20:59,990: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:20:59,990: INFO: [generated in 0.00014s] (2, 1, 0)
+2025-09-10 13:20:59,991: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:20:59,991: INFO: [generated in 0.00008s] (1, 1, 0)
+2025-09-10 13:20:59,991: INFO: COMMIT
+2025-09-10 13:20:59,992: INFO: BEGIN (implicit)
+2025-09-10 13:20:59,992: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-10 13:20:59,992: INFO: [generated in 0.00008s] (1,)
+2025-09-10 13:20:59,993: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-10 13:20:59,993: INFO: [generated in 0.00006s] (1,)
+2025-09-10 13:20:59,993: INFO: COMMIT
+2025-09-10 13:23:41,864: INFO: BEGIN (implicit)
+2025-09-10 13:23:41,866: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-10 13:23:41,866: INFO: [generated in 0.00011s] (2,)
+2025-09-10 13:23:41,878: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:23:41,879: INFO: [generated in 0.00015s] (2, 1, 0)
+2025-09-10 13:23:41,879: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:23:41,879: INFO: [generated in 0.00008s] (1, 1, 0)
+2025-09-10 13:23:41,880: INFO: COMMIT
+2025-09-10 13:23:41,880: INFO: BEGIN (implicit)
+2025-09-10 13:23:41,881: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-10 13:23:41,881: INFO: [generated in 0.00006s] (1,)
+2025-09-10 13:23:41,881: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-10 13:23:41,881: INFO: [generated in 0.00006s] (1,)
+2025-09-10 13:23:41,882: INFO: COMMIT
+2025-09-10 13:24:24,289: INFO: BEGIN (implicit)
+2025-09-10 13:24:24,291: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-10 13:24:24,291: INFO: [generated in 0.00015s] (2,)
+2025-09-10 13:24:24,306: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:24:24,306: INFO: [generated in 0.00046s] (2, 1, 0)
+2025-09-10 13:24:24,307: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:24:24,308: INFO: [generated in 0.00018s] (1, 1, 0)
+2025-09-10 13:24:24,309: INFO: COMMIT
+2025-09-10 13:24:24,309: INFO: BEGIN (implicit)
+2025-09-10 13:24:24,310: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-10 13:24:24,310: INFO: [generated in 0.00008s] (1,)
+2025-09-10 13:24:24,311: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-10 13:24:24,311: INFO: [generated in 0.00006s] (1,)
+2025-09-10 13:24:24,311: INFO: COMMIT
+2025-09-10 13:24:53,124: INFO: BEGIN (implicit)
+2025-09-10 13:24:53,126: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-10 13:24:53,126: INFO: [generated in 0.00010s] (2,)
+2025-09-10 13:24:53,138: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:24:53,138: INFO: [generated in 0.00014s] (2, 1, 0)
+2025-09-10 13:24:53,139: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:24:53,140: INFO: [generated in 0.00014s] (1, 1, 0)
+2025-09-10 13:24:53,140: INFO: COMMIT
+2025-09-10 13:24:53,141: INFO: BEGIN (implicit)
+2025-09-10 13:24:53,141: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-10 13:24:53,141: INFO: [generated in 0.00008s] (1,)
+2025-09-10 13:24:53,142: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-10 13:24:53,142: INFO: [generated in 0.00011s] (1,)
+2025-09-10 13:24:53,142: INFO: COMMIT
+2025-09-10 13:25:34,371: INFO: BEGIN (implicit)
+2025-09-10 13:25:34,373: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-10 13:25:34,373: INFO: [generated in 0.00011s] (2,)
+2025-09-10 13:25:34,385: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:25:34,385: INFO: [generated in 0.00015s] (2, 1, 0)
+2025-09-10 13:25:34,386: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:25:34,386: INFO: [generated in 0.00008s] (1, 1, 0)
+2025-09-10 13:25:34,386: INFO: COMMIT
+2025-09-10 13:25:34,387: INFO: BEGIN (implicit)
+2025-09-10 13:25:34,387: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-10 13:25:34,387: INFO: [generated in 0.00006s] (1,)
+2025-09-10 13:25:34,387: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-10 13:25:34,388: INFO: [generated in 0.00006s] (1,)
+2025-09-10 13:25:34,388: INFO: COMMIT
+2025-09-10 13:28:11,704: INFO: BEGIN (implicit)
+2025-09-10 13:28:11,707: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-10 13:28:11,707: INFO: [generated in 0.00016s] (2,)
+2025-09-10 13:28:11,717: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:28:11,717: INFO: [generated in 0.00014s] (2, 1, 0)
+2025-09-10 13:28:11,718: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:28:11,718: INFO: [generated in 0.00008s] (1, 1, 0)
+2025-09-10 13:28:11,719: INFO: COMMIT
+2025-09-10 13:28:11,719: INFO: BEGIN (implicit)
+2025-09-10 13:28:11,720: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-10 13:28:11,720: INFO: [generated in 0.00009s] (1,)
+2025-09-10 13:28:11,720: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-10 13:28:11,721: INFO: [generated in 0.00008s] (1,)
+2025-09-10 13:28:11,721: INFO: COMMIT
+2025-09-10 13:29:15,072: INFO: BEGIN (implicit)
+2025-09-10 13:29:15,073: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-10 13:29:15,073: INFO: [generated in 0.00010s] (2,)
+2025-09-10 13:29:15,086: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:29:15,086: INFO: [generated in 0.00015s] (2, 1, 0)
+2025-09-10 13:29:15,087: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:29:15,087: INFO: [generated in 0.00008s] (1, 1, 0)
+2025-09-10 13:29:15,087: INFO: COMMIT
+2025-09-10 13:29:15,088: INFO: BEGIN (implicit)
+2025-09-10 13:29:15,088: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-10 13:29:15,088: INFO: [generated in 0.00006s] (1,)
+2025-09-10 13:29:15,089: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-10 13:29:15,089: INFO: [generated in 0.00005s] (1,)
+2025-09-10 13:29:15,089: INFO: COMMIT
+2025-09-10 13:30:27,348: INFO: BEGIN (implicit)
+2025-09-10 13:30:27,350: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-10 13:30:27,350: INFO: [generated in 0.00010s] (2,)
+2025-09-10 13:30:27,358: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:30:27,358: INFO: [generated in 0.00016s] (2, 1, 0)
+2025-09-10 13:30:27,359: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:30:27,359: INFO: [generated in 0.00008s] (1, 1, 0)
+2025-09-10 13:30:27,359: INFO: COMMIT
+2025-09-10 13:30:27,360: INFO: BEGIN (implicit)
+2025-09-10 13:30:27,360: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-10 13:30:27,360: INFO: [generated in 0.00006s] (1,)
+2025-09-10 13:30:27,362: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-10 13:30:27,362: INFO: [generated in 0.00012s] (1,)
+2025-09-10 13:30:27,363: INFO: COMMIT
+2025-09-10 13:34:35,922: INFO: BEGIN (implicit)
+2025-09-10 13:34:35,923: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-10 13:34:35,923: INFO: [generated in 0.00013s] (2,)
+2025-09-10 13:34:35,932: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:34:35,932: INFO: [generated in 0.00015s] (2, 1, 0)
+2025-09-10 13:34:35,933: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 13:34:35,933: INFO: [generated in 0.00010s] (1, 1, 0)
+2025-09-10 13:34:35,934: INFO: UPDATE contracts SET citation_data=? WHERE contracts.id = ?
+2025-09-10 13:34:35,934: INFO: [generated in 0.00010s] ('{"\\u0418\\u043d\\u0434\\u0438\\u0432\\u0438\\u0434\\u0443\\u0430\\u043b\\u044c\\u043d\\u044b\\u0439 \\u043f\\u0440\\u0435\\u0434\\u043f\\u0440\\u043 ... (201 characters truncated) ... 43a\\u0438\\u0439 \\u0414\\u043c\\u0438\\u0442\\u0440\\u0438\\u0439 \\u0418\\u043e\\u0441\\u0438\\u0444\\u043e\\u0432\\u0438\\u0447": [[24, 25, 26]]}', 1)
+2025-09-10 13:34:35,934: INFO: COMMIT
+2025-09-10 13:34:35,935: INFO: BEGIN (implicit)
+2025-09-10 13:34:35,935: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-10 13:34:35,935: INFO: [generated in 0.00009s] (1,)
+2025-09-10 13:34:35,936: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-10 13:34:35,936: INFO: [generated in 0.00011s] (1,)
+2025-09-10 13:34:35,936: INFO: COMMIT
+2025-09-10 13:34:35,937: INFO: BEGIN (implicit)
+2025-09-10 13:34:35,937: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-10 13:34:35,937: INFO: [generated in 0.00008s] (1,)
+2025-09-10 13:34:35,938: INFO: INSERT INTO contract_citation_links (contract_id, citation_id, field_name) VALUES (?, ?, ?)
+2025-09-10 13:34:35,938: INFO: [generated in 0.00008s] [(1, 17, 'Индивидуальный предприниматель Лукачёв А.Ю.'), (1, 18, 'Индивидуальный предприниматель Лукачёв А.Ю.'), (1, 24, 'ИП Кодинский Дмитрий Иосифович'), (1, 25, 'ИП Кодинский Дмитрий Иосифович'), (1, 26, 'ИП Кодинский Дмитрий Иосифович')]
+2025-09-10 13:34:35,938: INFO: COMMIT
+2025-09-10 14:04:51,113: INFO: BEGIN (implicit)
+2025-09-10 14:04:51,114: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-10 14:04:51,114: INFO: [generated in 0.00010s] (2,)
+2025-09-10 14:04:51,130: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 14:04:51,130: INFO: [generated in 0.00015s] (2, 1, 0)
+2025-09-10 14:04:51,130: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 14:04:51,130: INFO: [generated in 0.00008s] (1, 1, 0)
+2025-09-10 14:04:51,131: INFO: UPDATE contracts SET citation_data=? WHERE contracts.id = ?
+2025-09-10 14:04:51,131: INFO: [generated in 0.00008s] ('{}', 1)
+2025-09-10 14:04:51,132: INFO: COMMIT
+2025-09-10 14:04:51,132: INFO: BEGIN (implicit)
+2025-09-10 14:04:51,133: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-10 14:04:51,133: INFO: [generated in 0.00006s] (1,)
+2025-09-10 14:04:51,133: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-10 14:04:51,133: INFO: [generated in 0.00006s] (1,)
+2025-09-10 14:04:51,134: INFO: COMMIT
+2025-09-10 14:06:24,012: INFO: BEGIN (implicit)
+2025-09-10 14:06:24,013: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-10 14:06:24,014: INFO: [generated in 0.00012s] (2,)
+2025-09-10 14:06:24,027: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 14:06:24,027: INFO: [generated in 0.00018s] (2, 1, 0)
+2025-09-10 14:06:24,028: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 14:06:24,028: INFO: [generated in 0.00009s] (1, 1, 0)
+2025-09-10 14:06:24,029: INFO: UPDATE contracts SET citation_data=? WHERE contracts.id = ?
+2025-09-10 14:06:24,029: INFO: [generated in 0.00010s] ('{"party_1_name": [[{"\\u0418\\u043d\\u0434\\u0438\\u0432\\u0438\\u0434\\u0443\\u0430\\u043b\\u044c\\u043d\\u044b\\u0439 \\u043f\\u0440\\u0435\\u0434\ ... (475 characters truncated) ...  [[{"40802810900110000211": [665]}, {"40802810200002555880": [666]}, {"30101810745250000659": [671]}, {"30101810145250000974": [673]}]], "bik": [[]]}', 1)
+2025-09-10 14:06:24,029: INFO: COMMIT
+2025-09-10 14:06:24,030: INFO: BEGIN (implicit)
+2025-09-10 14:06:24,031: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-10 14:06:24,031: INFO: [generated in 0.00019s] (1,)
+2025-09-10 14:06:24,032: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-10 14:06:24,032: INFO: [generated in 0.00010s] (1,)
+2025-09-10 14:06:24,032: INFO: COMMIT
+2025-09-10 14:06:24,032: INFO: BEGIN (implicit)
+2025-09-10 14:06:24,033: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-10 14:06:24,033: INFO: [generated in 0.00007s] (1,)
+2025-09-10 14:08:36,746: INFO: BEGIN (implicit)
+2025-09-10 14:08:36,747: INFO: SELECT citations.id AS citations_id, citations.document_id AS citations_document_id, citations.text AS citations_text, citations.page AS citations_page, citations.bbox AS citations_bbox, citations.paragraph_index AS citations_paragraph_index, citations.run_index AS citations_run_index 
+FROM citations 
+WHERE citations.document_id = ?
+2025-09-10 14:08:36,747: INFO: [generated in 0.00019s] (2,)
+2025-09-10 14:08:36,756: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.document_id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 14:08:36,757: INFO: [generated in 0.00027s] (2, 1, 0)
+2025-09-10 14:08:36,758: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+ LIMIT ? OFFSET ?
+2025-09-10 14:08:36,758: INFO: [generated in 0.00009s] (1, 1, 0)
+2025-09-10 14:08:36,759: INFO: UPDATE contracts SET citation_data=? WHERE contracts.id = ?
+2025-09-10 14:08:36,759: INFO: [generated in 0.00010s] ('{"\\u0418\\u043d\\u0434\\u0438\\u0432\\u0438\\u0434\\u0443\\u0430\\u043b\\u044c\\u043d\\u044b\\u0439 \\u043f\\u0440\\u0435\\u0434\\u043f\\u0440\\u043 ... (201 characters truncated) ... 43a\\u0438\\u0439 \\u0414\\u043c\\u0438\\u0442\\u0440\\u0438\\u0439 \\u0418\\u043e\\u0441\\u0438\\u0444\\u043e\\u0432\\u0438\\u0447": [[24, 25, 26]]}', 1)
+2025-09-10 14:08:36,759: INFO: COMMIT
+2025-09-10 14:08:36,760: INFO: BEGIN (implicit)
+2025-09-10 14:08:36,760: INFO: SELECT contracts.id, contracts.document_id, contracts.citation_data, contracts.parsed_amount, contracts.parsed_currency, contracts.parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-10 14:08:36,760: INFO: [generated in 0.00007s] (1,)
+2025-09-10 14:08:36,761: INFO: DELETE FROM contract_citation_links WHERE contract_citation_links.contract_id = ?
+2025-09-10 14:08:36,761: INFO: [generated in 0.00006s] (1,)
+2025-09-10 14:08:36,761: INFO: COMMIT
+2025-09-10 14:08:36,761: INFO: BEGIN (implicit)
+2025-09-10 14:08:36,762: INFO: SELECT contracts.id AS contracts_id, contracts.document_id AS contracts_document_id, contracts.citation_data AS contracts_citation_data, contracts.parsed_amount AS contracts_parsed_amount, contracts.parsed_currency AS contracts_parsed_currency, contracts.parsed_penalty_present AS contracts_parsed_penalty_present 
+FROM contracts 
+WHERE contracts.id = ?
+2025-09-10 14:08:36,762: INFO: [generated in 0.00007s] (1,)
+2025-09-10 14:08:36,762: INFO: INSERT INTO contract_citation_links (contract_id, citation_id, field_name) VALUES (?, ?, ?)
+2025-09-10 14:08:36,762: INFO: [generated in 0.00007s] [(1, 17, 'Индивидуальный предприниматель Лукачёв А.Ю.'), (1, 18, 'Индивидуальный предприниматель Лукачёв А.Ю.'), (1, 24, 'ИП Кодинский Дмитрий Иосифович'), (1, 25, 'ИП Кодинский Дмитрий Иосифович'), (1, 26, 'ИП Кодинский Дмитрий Иосифович')]
+2025-09-10 14:08:36,763: INFO: COMMIT
