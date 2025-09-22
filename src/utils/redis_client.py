@@ -27,9 +27,8 @@ async def get_redis_session():
 
 
 # Пример использования
-"""
-async with get_redis_session() as r:
-        await r.set('TEST', 123, ex=10)
-        value = await r.get('TEST')
-        print(value)
-"""
+
+# async with get_redis_session() as r:
+#         await r.set('TEST', 123, ex=10)
+#         value = await r.get('TEST')
+#         print(value)

@@ -100,9 +100,11 @@ def get_and_send_processing(document_id: int):
     if links:
         repo.bulk_create_citation_links(contract.id, links) # type: ignore
 
+    # Вместо datetime.now() необходимо передавать когда напомнить
     # set_reminder(result, datetime.now())
 
     return result
 
-if __name__ == "__main__":
-    get_and_send_processing(2)
+# Тестовый запуск
+# if __name__ == "__main__":
+#     get_and_send_processing(2)

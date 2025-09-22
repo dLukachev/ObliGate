@@ -1,6 +1,6 @@
-docker-compose build - сборка 
+Сброка ```docker-compose build```
 
-docker-compose up - запуск 
+Запуск ```docker-compose up```
 
 ---- Обязательно в .env
 
@@ -10,3 +10,9 @@ USER_REDIS=""
 PASS_REDIS=""
 
 DATABASE_URL = ""
+
+---- Локальный запуск
+
+В первом терминале ```uvicorn app:app --host 0.0.0.0 --port 8000```
+
+Во втором ```celery -A src.utils.celery_client worker --pool=solo -l info```

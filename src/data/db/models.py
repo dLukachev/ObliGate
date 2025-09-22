@@ -24,7 +24,7 @@ class Document(Base):
     citations = relationship("Citation", back_populates="document")
     contract = relationship("Contract", back_populates="document", uselist=False)  # Один договор на документ
 
-# Модель для цитат (трассировка к источнику)
+# Модель для цитат
 class Citation(Base):
     __tablename__ = 'citations'
 
@@ -39,7 +39,7 @@ class Citation(Base):
     # Связи
     document = relationship("Document", back_populates="citations")
 
-# Модель для реквизитов (INN, KPP, OGRN)
+# Модель для реквизитов
 class Requisites(Base):
     __tablename__ = 'requisites'
 
@@ -49,22 +49,20 @@ class Requisites(Base):
     kpp_id = Column(Integer, ForeignKey('citations.id'), nullable=True)
     ogrn_id = Column(Integer, ForeignKey('citations.id'), nullable=True)
 
-    # Связи к цитатам
+    # Связи
     inn = relationship("Citation", foreign_keys=[inn_id])
     kpp = relationship("Citation", foreign_keys=[kpp_id])
     ogrn = relationship("Citation", foreign_keys=[ogrn_id])
 
     contract = relationship("Contract", back_populates="requisites")
 
-# Модель для извлеченной информации из договора (обновленная схема)
+# Модель для извлеченной информации из договора
 class Contract(Base):
     __tablename__ = 'contracts'
 
     id = Column(Integer, primary_key=True, index=True)
     document_id = Column(Integer, ForeignKey('documents.id'), nullable=False, unique=True)
 
-    # Удалены отдельные _id поля, так как они заменены таблицей contract_citation_links
-    # Вместо этого добавляем JSON поле для агрегированных данных (опционально)
     citation_data = Column(JSON, nullable=True)  # {"party_1_name": [6,7,8], "contract_date": [5], ...} для аналитики
 
     parsed_amount = Column(Float, nullable=True)  # Парсенная сумма для удобства
@@ -77,7 +75,7 @@ class Contract(Base):
     obligations = relationship("Obligation", back_populates="contract")  # Множество обязательств
     citations = relationship("Citation", secondary=contract_citation_links, back_populates="contracts")
 
-# Модель для обязательств/дедлайнов (формируем из извлеченных данных)
+# Модель для обязательств/дедлайнов
 class Obligation(Base):
     __tablename__ = 'obligations'
 
@@ -85,7 +83,7 @@ class Obligation(Base):
     contract_id = Column(Integer, ForeignKey('contracts.id'), nullable=False)
     description = Column(String, nullable=False)  # Описание обязательства
     due_date = Column(DateTime, nullable=True)  # Срок выполнения
-    status = Column(String, default='pending')  # Статус: pending, completed, overdue
+    status = Column(String, default='pending')  # pending, completed, overdue
     citation_id = Column(Integer, ForeignKey('citations.id'), nullable=True)  # Ссылка на источник
 
     # Связи
